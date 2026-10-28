@@ -1,0 +1,1705 @@
+<title>Атлас структуры личности</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&family=Unbounded:wght@500;700&display=swap">
+<style>
+/* Layout: app shell — sticky header with tabs; simulator = control bar on top, sticky 3D well with a stress lever on the left, state and cards on the right (tabs on phones); reference views below. */
+:root{
+  --bg:#eef1f4; --surface:#ffffff; --surface2:#f5f7fa; --ink:#1b1e2b; --muted:#5b6276; --line:#d7dce5;
+  --accent:#6a4bd8; --accent-ink:#ffffff; --accent-soft:#ece7fc;
+  --lv0:#1f9a86; --lv1:#3a6bd0; --lv2:#d1861a; --lv3:#c23b55;
+  --g-mature:#1f9a86; --g-secondary:#3a6bd0; --g-primary:#d1861a; --g-psychotic:#c23b55; --g-dsm:#8a6bb8;
+  --stage-a:#e3f1ef; --stage-b:#cfc9de; --plate-alpha:22%;
+  --shadow:0 1px 2px rgba(22,26,44,.06),0 10px 28px rgba(22,26,44,.08);
+  --f-display:"Unbounded","Golos Text",system-ui,sans-serif;
+  --f-body:"Golos Text",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --r:14px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0e1118; --surface:#161b25; --surface2:#1b2130; --ink:#e9ecf4; --muted:#9aa2b6; --line:#2a3242;
+  --accent:#9c86ff; --accent-ink:#130f26; --accent-soft:#2a2448;
+  --lv0:#38c4ad; --lv1:#6d96f2; --lv2:#f0ae4a; --lv3:#f0687f;
+  --g-mature:#38c4ad; --g-secondary:#6d96f2; --g-primary:#f0ae4a; --g-psychotic:#f0687f; --g-dsm:#b59be6;
+  --stage-a:#122029; --stage-b:#06070c; --plate-alpha:26%;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.35);
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0e1118; --surface:#161b25; --surface2:#1b2130; --ink:#e9ecf4; --muted:#9aa2b6; --line:#2a3242;
+  --accent:#9c86ff; --accent-ink:#130f26; --accent-soft:#2a2448;
+  --lv0:#38c4ad; --lv1:#6d96f2; --lv2:#f0ae4a; --lv3:#f0687f;
+  --g-mature:#38c4ad; --g-secondary:#6d96f2; --g-primary:#f0ae4a; --g-psychotic:#f0687f; --g-dsm:#b59be6;
+  --stage-a:#122029; --stage-b:#06070c; --plate-alpha:26%;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.35);
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--ink)}
+body{font-family:var(--f-body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;letter-spacing:-.01em;text-wrap:balance;margin:0}
+h2{font-size:clamp(19px,2.4vw,26px)}
+h3{font-size:16px}
+p{margin:0}
+button{font:inherit;color:inherit}
+.mono{font-family:var(--f-mono)}
+.muted{color:var(--muted)}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:1240px;margin:0 auto}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+
+/* header */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--surface)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;padding-block:10px}
+.brand{display:flex;flex-direction:column;min-width:0}
+.brand b{font-family:var(--f-display);font-size:15px;white-space:nowrap}
+.brand span{font-size:12px;color:var(--muted)}
+.tabs{display:flex;gap:4px;margin-left:auto;background:var(--surface2);border:1px solid var(--line);border-radius:999px;padding:3px}
+.tabs a{text-decoration:none;color:var(--muted);font-weight:600;font-size:13.5px;padding:7px 14px;border-radius:999px;white-space:nowrap}
+.tabs a[aria-current="page"]{background:var(--ink);color:var(--bg)}
+.prog{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px 4px 4px;cursor:pointer;flex:none}
+.prog svg{display:block}
+.prog .t{font-size:12px;line-height:1.15}
+.prog .t b{font-family:var(--f-mono);font-size:12.5px}
+@media (max-width:820px){
+  .top .wrap{flex-wrap:wrap;gap:8px 12px;padding-block:8px 6px}
+  .brand{flex:1}
+  .brand span{display:none}
+  .prog{order:2;padding:3px 10px 3px 3px}
+  .prog .t span{display:none}
+  .tabs{order:3;margin:0;width:100%;overflow-x:auto;scrollbar-width:none;justify-content:space-between}
+  .tabs::-webkit-scrollbar{display:none}
+  .tabs a{padding:6px 6px;font-size:12.5px;flex:1 1 auto;text-align:center}
+  .toast{font-size:12.5px;padding:8px 12px}
+}
+
+main .wrap{padding-block:22px 48px;display:flex;flex-direction:column;gap:22px}
+@media (max-width:820px){main .wrap{padding-block:16px 40px;gap:16px}}
+.view{display:flex;flex-direction:column;gap:22px;min-width:0}
+@media (max-width:820px){.view{gap:16px}}
+.view-intro + .view-intro{margin-top:4px}
+.view-intro{display:flex;flex-direction:column;gap:6px;max-width:74ch}
+.view-intro p{color:var(--muted)}
+.howto{margin:2px 0 0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;font-size:14.5px}
+.howto li{position:relative;padding-left:18px;color:var(--muted)}
+.howto li::before{content:"";position:absolute;left:2px;top:.55em;width:8px;height:8px;border-radius:50%;background:var(--accent)}
+.howto li b{color:var(--ink);font-weight:600}
+@media (max-width:820px){.howto{font-size:13.5px;gap:5px}}
+@media (max-width:820px){.view-intro p{font-size:14px}}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+
+/* ---------- control bar ---------- */
+.ctlbar{padding:14px 16px}
+.ctl-desktop{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,440px);gap:20px;align-items:start}
+.ctl-mobile{display:none}
+@media (max-width:820px){.ctlbar{padding:8px}.ctl-desktop{display:none}.ctl-mobile{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:8px}}
+.ctrl{display:flex;flex-direction:column;gap:8px;min-width:0}
+.ctrl .lab{font-size:12px;font-weight:600;color:var(--muted)}
+.chiprow{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+.chiprow.wrapr{flex-wrap:wrap;overflow:visible}
+.tchip{flex:none;display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface2);border-radius:999px;padding:4px 10px 4px 4px;font-size:13px;cursor:pointer}
+.mono-badge{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:1px solid var(--line);font-size:10.5px;font-weight:700;font-family:var(--f-mono);flex:none}
+.tchip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tchip[aria-pressed="true"] .mono-badge{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface2)}
+.seg button{border:0;background:none;padding:9px 4px;font-size:12.5px;font-weight:600;cursor:pointer;border-right:1px solid var(--line);color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:3px}
+.seg button::before{content:"";width:22px;height:4px;border-radius:4px;background:var(--c)}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--c);color:#fff}
+.seg button[aria-pressed="true"]::before{background:#fff}
+.picker{display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;border:1px solid var(--line);background:var(--surface2);border-radius:12px;padding:7px 30px 8px 11px;position:relative;cursor:pointer;min-width:0}
+.picker .lab{font-size:11px;color:var(--muted);font-weight:600}
+.picker b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;display:flex;align-items:center;gap:6px}
+.picker b::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--c,var(--accent))}
+.picker .car{position:absolute;right:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:12px}
+.optlist{display:flex;flex-direction:column;gap:6px}
+.optlist button{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;border:1px solid var(--line);background:var(--surface2);border-radius:12px;padding:10px 12px;cursor:pointer}
+.optlist button b{display:block;font-size:14.5px}
+.optlist button span.d{display:block;font-size:12.5px;color:var(--muted);line-height:1.35}
+.optlist button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.optlist .ck{font-family:var(--f-mono);color:var(--accent);font-weight:700}
+.optlist .sw{width:12px;height:36px;border-radius:6px;background:var(--c)}
+
+/* ---------- simulator layout ---------- */
+.sim{display:grid;grid-template-columns:minmax(340px,450px) minmax(0,1fr);gap:20px;align-items:start}
+.stickybox{position:sticky;top:calc(env(safe-area-inset-top,0px) + var(--hh,62px) + 10px);align-self:start;display:flex;flex-direction:column;gap:8px;z-index:6}
+.simR{display:flex;flex-direction:column;gap:16px;min-width:0}
+@media (max-width:820px){
+  .sim{display:flex;flex-direction:column;gap:12px}
+  .stickybox{top:calc(env(safe-area-inset-top,0px) + var(--hh,92px) + 6px);gap:6px;align-self:stretch;width:100%;min-width:0}
+}
+
+/* stage */
+.stage{position:relative;overflow:hidden;border-radius:var(--r);border:1px solid var(--line);
+  background:radial-gradient(120% 70% at 50% 0%,var(--stage-a),transparent 70%),linear-gradient(180deg,var(--stage-a),var(--stage-b));
+  display:grid;grid-template-columns:68px 88px minmax(0,1fr) 40px;user-select:none;box-shadow:var(--shadow)}
+@media (max-width:820px){.stage{grid-template-columns:62px 58px minmax(0,1fr) 34px}.lever{padding:10px 2px}.lv-zone{font-size:9px}}
+.stage .hint{position:absolute;right:46px;bottom:8px;font-size:10.5px;color:var(--muted);font-family:var(--f-mono);pointer-events:none}
+@media (max-width:820px){.stage .hint{display:none}}
+.labels{position:relative}
+.lbl{position:absolute;left:4px;right:0;transform:translateY(-50%);text-align:left;background:none;border:0;padding:4px 0;cursor:pointer;display:flex;flex-direction:column;gap:1px}
+.lbl b{font-family:var(--f-display);font-size:11.5px;font-weight:700;color:var(--c)}
+.lbl span{font-size:10px;color:var(--muted);line-height:1.2}
+.lbl.on b{text-decoration:underline;text-underline-offset:3px}
+@media (max-width:820px){.lbl b{font-size:9.5px;letter-spacing:-.01em}.lbl span{display:none}}
+.vp{position:relative;perspective:950px;perspective-origin:50% 40%;cursor:grab;touch-action:pan-y}
+.vp:active{cursor:grabbing}
+.well{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;transform:rotateX(60deg) rotateZ(var(--rz,-32deg))}
+.plate{position:absolute;width:var(--ps);height:var(--ps);left:calc(var(--ps) / -2);top:calc(var(--ps) / -2);border-radius:24%;
+  transform:translateZ(var(--z));
+  background:
+   radial-gradient(circle at 30% 30%,color-mix(in srgb,var(--c) 30%,transparent) 0 2px,transparent 3px) 0 0/18px 18px,
+   radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--c) var(--plate-alpha),transparent),color-mix(in srgb,var(--c) 8%,transparent) 70%);
+  border:1.5px solid color-mix(in srgb,var(--c) 70%,transparent);
+  box-shadow:inset 0 0 26px color-mix(in srgb,var(--c) 25%,transparent);transition:box-shadow .4s,border-color .4s}
+.plate.on{border-color:var(--c);box-shadow:inset 0 0 34px color-mix(in srgb,var(--c) 45%,transparent),0 0 0 3px color-mix(in srgb,var(--c) 30%,transparent)}
+.plate.ripple::after{content:"";position:absolute;inset:-2px;border-radius:24%;border:2px solid var(--c);animation:ripple .9s ease-out forwards}
+@keyframes ripple{from{opacity:.9;transform:scale(1)}to{opacity:0;transform:scale(1.35)}}
+.orb{position:absolute;width:42px;height:42px;left:-21px;top:-21px;border-radius:50%;
+  transform:translateZ(var(--oz,0px)) rotateZ(calc(var(--rz,-32deg) * -1)) rotateX(-60deg);
+  background:radial-gradient(circle at 35% 30%,#fff 0 6%,color-mix(in srgb,var(--oc) 70%,#fff) 18%,var(--oc) 55%,color-mix(in srgb,var(--oc) 60%,#000) 100%);
+  box-shadow:0 0 0 2px color-mix(in srgb,var(--oc) 40%,transparent),0 0 0 calc(2px + var(--supr,0px)) color-mix(in srgb,var(--accent) var(--supa,0%),transparent),0 0 calc(16px + var(--glow,0px)) color-mix(in srgb,var(--oc) 75%,transparent);
+  transition:box-shadow .45s ease;
+  display:grid;place-items:center;color:#fff;font-family:var(--f-display);font-weight:700;font-size:14px;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.orbit{position:absolute;width:0;height:0;pointer-events:none}
+.orbit .chip{position:absolute;pointer-events:auto;animation:float 4s ease-in-out infinite}
+@keyframes float{50%{margin-top:-3px}}
+.gauge{position:relative;display:flex;flex-direction:column;align-items:center;padding-block:12px;gap:6px}
+.gauge .ttl{font-family:var(--f-mono);font-size:9px;color:var(--muted);text-align:center;line-height:1.15}
+.gtrack{position:relative;flex:1;width:14px;border-radius:8px;display:flex;flex-direction:column;border:1px solid var(--line)}
+.gtrack div{flex:1;border-bottom:1px solid color-mix(in srgb,var(--bg) 60%,transparent);display:grid;place-items:center;font-family:var(--f-mono);font-size:9px;color:#fff}
+.gtrack div:first-child{border-radius:7px 7px 0 0}.gtrack div:last-child{border-radius:0 0 7px 7px;border-bottom:0}
+.gptr{position:absolute;left:calc(50% - 14px);width:28px;height:3px;background:var(--ink);border-radius:2px;transition:top .5s cubic-bezier(.2,.8,.2,1)}
+.gptr::after{content:"";position:absolute;left:-6px;top:-4px;border:5px solid transparent;border-left-color:var(--ink)}
+.vesicle{position:absolute;border-radius:50%;background:color-mix(in srgb,var(--accent) 22%,transparent);pointer-events:none;animation:rise linear infinite}
+@keyframes rise{from{transform:translateY(0)}to{transform:translateY(-520px)}}
+
+/* stress lever */
+.lever{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 0 10px 4px;touch-action:none;border-right:1px dashed color-mix(in srgb,var(--muted) 35%,transparent)}
+.lv-cap{font-family:var(--f-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);font-weight:700}
+.lv-btn{width:38px;height:30px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-weight:700;font-size:18px;line-height:1;cursor:pointer;display:grid;place-items:center;box-shadow:var(--shadow);flex:none}
+.lv-btn:active{transform:scale(.94)}
+.lv-track{position:relative;flex:1;width:18px;border-radius:10px;background:color-mix(in srgb,var(--surface) 70%,transparent);border:1px solid var(--line);cursor:ns-resize}
+.lv-track::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,var(--lv0),var(--lv1) 34%,var(--lv2) 67%,var(--lv3));clip-path:inset(0 0 calc(100% - var(--p,35%)) 0 round 9px);transition:clip-path .45s cubic-bezier(.2,.8,.2,1)}
+.lv-track.dragging::before,.lv-track.dragging .lv-handle{transition:none}
+.lv-tick{position:absolute;left:-5px;width:6px;height:1px;background:var(--muted)}
+.lv-handle{position:absolute;left:50%;top:var(--p,35%);transform:translate(-50%,-50%);width:44px;height:28px;border-radius:14px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;font-size:12.5px;box-shadow:0 2px 10px rgba(0,0,0,.28),0 0 0 3px color-mix(in srgb,var(--hc,var(--accent)) 55%,transparent);cursor:grab;transition:top .45s cubic-bezier(.2,.8,.2,1)}
+.lv-zone{font-size:9.5px;letter-spacing:-.01em;font-weight:700;color:var(--zc,var(--muted));text-align:center;line-height:1.1;min-height:12px;max-width:100%;white-space:nowrap}
+.lv-hint{position:absolute;left:86px;bottom:10px;white-space:nowrap;background:var(--accent);color:var(--accent-ink);font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;pointer-events:none;animation:nudgex 1.4s ease-in-out infinite;z-index:3;box-shadow:var(--shadow)}
+@keyframes nudgex{50%{transform:translateX(-5px)}}
+@media (max-width:820px){.lv-hint{left:76px;font-size:11px;padding:4px 9px}}
+@keyframes nudge{50%{margin-top:6px}}
+@media (max-width:820px){.lv-btn{width:36px;height:30px}.lv-handle{width:40px;height:26px;font-size:12px}}
+@media (prefers-reduced-motion:reduce){.vesicle,.orbit .chip,.lv-hint{animation:none}.plate.ripple::after{animation:none}}
+
+/* status line under the stage */
+.status{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:12px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);font-size:12.5px;min-width:0}
+.status .bc{flex:none;font-weight:700;color:#fff;background:var(--c);border-radius:999px;padding:2px 10px;font-size:12px}
+.status .df{flex:none;font-family:var(--f-mono);font-size:11.5px;color:var(--muted)}
+.status .last{margin-left:auto;min-width:0;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.status .last b{font-family:var(--f-mono)}
+.flyer{position:fixed;z-index:60;left:0;top:0;padding:3px 9px;border-radius:999px;font-family:var(--f-mono);font-weight:700;font-size:13px;color:#fff;background:var(--fc);pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.25);will-change:transform}
+.float{position:fixed;z-index:60;font-family:var(--f-mono);font-weight:700;font-size:15px;pointer-events:none;animation:up 1.1s ease-out forwards}
+@keyframes up{from{opacity:1;transform:translate(0,-50%)}to{opacity:0;transform:translate(14px,-50%)}}
+
+
+/* compact strip on phones: appears when the big stage scrolls out of view */
+.mini{display:none}
+@media (max-width:820px){
+  .stickybox{position:static}
+  .stage{scroll-margin-top:calc(var(--hh,92px) + 10px)}
+  .mini{display:flex;position:fixed;z-index:15;left:0;right:0;top:calc(env(safe-area-inset-top,0px) + var(--hh,92px));align-items:center;gap:8px;
+    padding:6px max(16px,env(safe-area-inset-right,0px)) 6px max(16px,env(safe-area-inset-left,0px));
+    background:color-mix(in srgb,var(--surface) 96%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);box-shadow:var(--shadow);
+    transform:translateY(-110%);opacity:0;visibility:hidden;transition:transform .22s ease,opacity .22s ease,visibility 0s linear .22s}
+  .mini.show{transform:none;opacity:1;visibility:visible;transition-delay:0s}
+}
+.mini .bc{flex:none;border:0;cursor:pointer;font-weight:700;color:#fff;background:var(--c);border-radius:999px;padding:3px 10px;font-size:11.5px}
+.mini .ml{flex:none;font-family:var(--f-mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.mtrack{flex:1;min-width:40px;position:relative;height:10px;border-radius:6px;background:var(--surface2);border:1px solid var(--line);overflow:hidden}
+.mtrack i{position:absolute;inset:0;background:linear-gradient(90deg,var(--lv0),var(--lv1) 34%,var(--lv2) 67%,var(--lv3));clip-path:inset(0 calc(100% - var(--p,35%)) 0 0);transition:clip-path .45s cubic-bezier(.2,.8,.2,1)}
+.mini .mv{flex:none;font-family:var(--f-mono);font-weight:700;font-size:13px;min-width:24px;text-align:right;font-variant-numeric:tabular-nums}
+.mini .lv-btn{width:32px;height:28px;font-size:16px;box-shadow:none}
+/* support */
+.supseg{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.supseg button{display:flex;flex-direction:column;align-items:center;gap:5px;border:1px solid var(--line);background:var(--surface2);border-radius:12px;padding:8px 4px;font-size:12px;font-weight:700;cursor:pointer;color:var(--muted)}
+.supseg .bars{display:flex;gap:3px;align-items:flex-end;height:14px}
+.supseg .bars i{width:6px;border-radius:2px;background:var(--line)}
+.supseg .bars i:nth-child(1){height:6px}.supseg .bars i:nth-child(2){height:10px}.supseg .bars i:nth-child(3){height:14px}
+.supseg .bars i.on{background:var(--accent)}
+.supseg button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--ink)}
+.supdesc{font-size:13.5px}
+@media (max-width:820px){.supseg{gap:4px}.supseg button{font-size:10.5px;letter-spacing:-.02em;padding:8px 2px}}
+.supstats{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.supstats > div{background:var(--surface2);border-radius:10px;padding:8px 10px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px;font-size:12px;color:var(--muted)}
+.supstats > div b{font-family:var(--f-mono);color:var(--ink);font-size:13px}
+.supstats .wide{grid-column:1 / -1}
+.supstats .bar{flex-basis:100%;height:7px;border-radius:7px;background:var(--surface);border:1px solid var(--line);overflow:hidden}
+.supstats .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .5s}
+.btn.danger{color:var(--lv3);border-color:color-mix(in srgb,var(--lv3) 45%,var(--line))}
+.btn:disabled{opacity:.45;cursor:default}
+.struct{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 10px;align-items:baseline;padding:10px 12px;border-radius:12px;background:var(--surface2);font-size:13px}
+.struct .sl{color:var(--muted)}
+.struct .mode{grid-column:1 / -1;font-weight:600;color:var(--c)}
+.status .sp{flex:none;font-family:var(--f-mono);font-size:11px;font-weight:700;color:var(--accent);border:1px solid color-mix(in srgb,var(--accent) 45%,var(--line));border-radius:999px;padding:1px 7px}
+/* panel tabs (all widths) */
+.ptabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:3px}
+.ptabs button{border:0;background:none;border-radius:9px;padding:9px 4px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;white-space:nowrap;display:flex;align-items:center;justify-content:center;gap:6px}
+.ptabs button i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--tc)}
+.ptabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+@media (max-width:520px){.ptabs{grid-template-columns:repeat(2,minmax(0,1fr))}.ptabs button{font-size:12.5px;padding:8px 4px}}
+.panel{display:none;flex-direction:column;gap:10px;min-width:0}
+.panel.on{display:flex}
+.panel:not(.on){display:none !important}
+
+/* readout */
+.readout{padding:18px;gap:14px}
+@media (max-width:820px){.readout{padding:14px}}
+.state-h .band{font-family:var(--f-display);font-size:21px;color:var(--c);line-height:1.15}
+.dfs{font-size:13px}
+.dfs b{font-family:var(--f-mono)}
+.meters{display:grid;grid-template-columns:1fr 1fr;gap:10px 16px}
+.meter{display:flex;flex-direction:column;gap:4px}
+.meter .row{display:flex;justify-content:space-between;gap:6px;font-size:12px;color:var(--muted)}
+.meter .row b{font-family:var(--f-mono);color:var(--ink);font-variant-numeric:tabular-nums}
+.meter .bar{height:7px;border-radius:7px;background:var(--surface2);border:1px solid var(--line);overflow:hidden}
+.meter .bar i{display:block;height:100%;border-radius:7px;background:var(--mc,var(--accent));transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.blk{display:flex;flex-direction:column;gap:6px}
+.blk h4{margin:0;font-size:11px;font-family:var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.blk p{font-size:14px}
+.dchip{display:inline-flex;align-items:center;gap:6px;border:1px solid color-mix(in srgb,var(--gc) 55%,var(--line));background:color-mix(in srgb,var(--gc) 10%,var(--surface));color:var(--ink);border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+.dchip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--gc)}
+.dchip.dim{opacity:.35}
+ul.marks{margin:0;padding-left:18px;font-size:14px;display:flex;flex-direction:column;gap:2px}
+
+/* decks */
+.deck-h{display:flex;flex-direction:column;gap:2px}
+.deck-h h3{display:flex;align-items:center;gap:8px}
+.deck-h h3 .ar{font-family:var(--f-mono);font-size:12px;padding:2px 8px;border-radius:999px;color:#fff}
+.deck-h p{font-size:13px;color:var(--muted)}
+.cardgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(172px,1fr));gap:8px}
+@media (max-width:820px){.cardgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.pcard{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 11px;display:flex;flex-direction:column;gap:5px;cursor:pointer;position:relative;transition:transform .15s,box-shadow .15s,border-color .15s;box-shadow:var(--shadow);min-width:0}
+.pcard:hover{transform:translateY(-2px);border-color:var(--kc)}
+.pcard:active{transform:translateY(1px) scale(.98)}
+.pcard b{font-size:13.5px;line-height:1.25}
+.pcard p{font-size:12px;color:var(--muted);line-height:1.35;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+@media (max-width:820px){.pcard p{-webkit-line-clamp:2}}
+.pcard .eff{display:flex;align-items:center;gap:6px;margin-top:auto;padding-top:2px}
+.pcard .eff .v{font-family:var(--f-mono);font-weight:700;font-size:12.5px;color:var(--kc);white-space:nowrap}
+.pcard .wt{flex:1;height:5px;border-radius:5px;background:var(--surface2);overflow:hidden}
+.pcard .wt i{display:block;height:100%;background:var(--kc);border-radius:5px}
+.pcard .tag{align-self:flex-start;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:#fff;background:var(--kc);border-radius:6px;padding:2px 6px}
+.pcard.hot{border-color:var(--kc);box-shadow:0 0 0 2px color-mix(in srgb,var(--kc) 30%,transparent),var(--shadow)}
+.pcard.pulse{animation:pc .5s ease-out}
+@keyframes pc{30%{transform:scale(.95)}}
+.loghead{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.log{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13px}
+.log li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:baseline;padding:6px 10px;border-radius:10px;background:var(--surface2)}
+.log li .d{font-family:var(--f-mono);font-weight:700}
+.log li .lv{font-size:11.5px;color:var(--muted);white-space:nowrap}
+@media (max-width:820px){.journal .log li:nth-child(n+5){display:none}}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:7px 12px;font-size:13px;font-weight:600;cursor:pointer}
+.btn.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn:hover{border-color:var(--ink)}
+
+/* matrix: desktop table (rows = types) */
+.mx-wrap{overflow-x:auto;border-radius:var(--r);border:1px solid var(--line);background:var(--surface)}
+table.mx{border-collapse:separate;border-spacing:0;width:100%;min-width:920px;font-size:12.5px;table-layout:fixed}
+.mx th,.mx td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+.mx thead th{text-align:left;background:var(--surface2);font-weight:600}
+.mx thead th.lvh{border-top:4px solid var(--c)}
+.mx thead th.lvh b{font-family:var(--f-display);font-size:12.5px;color:var(--c);display:block}
+.mx thead th.lvh span{font-size:11px;color:var(--muted);font-weight:400}
+.mx thead th.col{background:color-mix(in srgb,var(--c) 14%,var(--surface2))}
+.mx th.rowh{text-align:left;width:210px;background:var(--surface);border-right:1px solid var(--line)}
+.mx th.rowh button{all:unset;cursor:pointer;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;align-items:start}
+.mx th.rowh b{font-size:13px;display:block}
+.mx th.rowh small{font-size:11px;color:var(--muted);font-weight:400;line-height:1.3;display:block}
+.mx tr.cur th.rowh{background:color-mix(in srgb,var(--accent) 10%,var(--surface))}
+.mx tr.cur th.rowh .mono-badge{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.mx td button{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:3px;border-radius:9px;padding:7px 9px;line-height:1.32;background:color-mix(in srgb,var(--c) 8%,transparent);border:1px solid transparent;height:100%;box-sizing:border-box}
+.mx td button b{color:var(--c);font-size:12.5px}
+.mx td button span{color:var(--ink);font-size:12px}
+.mx td button:hover,.mx td button:focus-visible{border-color:var(--c)}
+.mx tr.cur td button{background:color-mix(in srgb,var(--c) 16%,transparent)}
+.mx td.here button{border-color:var(--c);box-shadow:0 0 0 2px color-mix(in srgb,var(--c) 35%,transparent)}
+.mx td.here button b::after{content:" · сейчас";font-family:var(--f-mono);font-size:10.5px;font-weight:700}
+
+/* matrix: phones — minimap + level cards */
+.mxm{display:none}
+@media (max-width:820px){.mx-wrap{display:none}.mxm{display:flex;flex-direction:column;gap:12px}}
+.mmap{display:grid;grid-template-columns:minmax(0,1fr) repeat(4,46px);gap:4px;padding:10px;align-items:center}
+.mmap .hd{font-family:var(--f-mono);font-size:9.5px;font-weight:700;text-align:center;color:var(--c);border-bottom:3px solid var(--c);padding-bottom:3px}
+.mmap .rl{all:unset;cursor:pointer;display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;min-width:0;padding:2px 0}
+.mmap .rl span.n{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mmap .rl[aria-pressed="true"]{color:var(--accent)}
+.mmap .rl[aria-pressed="true"] .mono-badge{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.mmap .c{all:unset;cursor:pointer;height:30px;border-radius:8px;background:color-mix(in srgb,var(--c) 22%,transparent);border:1px solid color-mix(in srgb,var(--c) 40%,transparent);display:grid;place-items:center;font-family:var(--f-display);font-size:11px;font-weight:700;color:#fff}
+.mmap .c.selrow{background:color-mix(in srgb,var(--c) 45%,transparent)}
+.mmap .c.sel{background:var(--c);box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--c)}
+.mmap .c.me::after{content:"Я";width:18px;height:18px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-size:10px}
+.mxcards{display:flex;flex-direction:column;gap:8px}
+.mxc{display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-left:5px solid var(--c);cursor:pointer;text-align:left}
+.mxc .hd2{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.mxc .hd2 small{font-family:var(--f-mono);font-size:10.5px;color:var(--c);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+.mxc .hd2 b{font-size:15px}
+.mxc p{font-size:13.5px}
+.mxc{transition:opacity .2s,transform .2s,background .2s}
+.mxcards.has-sel .mxc:not(.sel){opacity:.55}
+.mxc.sel{background:color-mix(in srgb,var(--c) 14%,var(--surface));border:2px solid var(--c);border-left-width:8px;box-shadow:0 0 0 4px color-mix(in srgb,var(--c) 22%,transparent),var(--shadow);transform:scale(1.01)}
+.mxc .selb{display:none;margin-left:auto;font-family:var(--f-mono);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:var(--c);border-radius:6px;padding:2px 7px}
+.mxc.sel .selb{display:inline-block}
+.mmsel{grid-column:1 / -1;display:flex;align-items:center;gap:8px;margin-top:4px;padding:8px 10px;border-radius:10px;background:color-mix(in srgb,var(--c) 14%,var(--surface2));border:1px solid color-mix(in srgb,var(--c) 45%,var(--line));font-size:12.5px}
+.mmsel b{color:var(--ink)}
+.mmsel i{flex:none;width:10px;height:10px;border-radius:3px;background:var(--c)}
+
+/* levels view */
+.lvgrid{display:grid;grid-template-columns:150px repeat(4,minmax(0,1fr));border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+.lvgrid > div{padding:10px 12px;border-bottom:1px solid var(--line);font-size:13.5px;transition:background .15s}
+.lvgrid .h{background:var(--surface2);font-weight:700;position:relative}
+.lvgrid .h button{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:3px}
+.lvgrid .h b{font-family:var(--f-display);color:var(--c);font-size:14px}
+.lvgrid .h span{font-weight:400;font-size:12px;color:var(--muted)}
+.lvgrid .h::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--c)}
+.lvgrid .crit{font-weight:600;color:var(--muted);font-size:12.5px;background:var(--surface2)}
+.lvgrid .hl{background:color-mix(in srgb,var(--accent) 8%,var(--surface))}
+.lvmobile{display:none}
+@media (max-width:860px){.lvgrid{display:none}.lvmobile{display:flex;flex-direction:column;gap:12px}}
+.lvcard{padding:16px;display:flex;flex-direction:column;gap:10px;border-top:4px solid var(--c)}
+.lvcard dl{margin:0;display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.lvcard dt{font-size:11px;font-family:var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.lvcard dd{margin:0;font-size:14px}
+.flow{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;counter-reset:st}
+@media (max-width:980px){.flow{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:480px){.flow{grid-template-columns:minmax(0,1fr)}}
+.step{padding:14px;display:flex;flex-direction:column;gap:6px;position:relative}
+.step::before{counter-increment:st;content:counter(st);font-family:var(--f-mono);font-size:12px;font-weight:700;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:var(--sc,var(--accent));color:#fff}
+.step b{font-size:14px}
+.step p{font-size:13px;color:var(--muted)}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+@media (max-width:760px){.two{grid-template-columns:minmax(0,1fr)}}
+.pad{padding:18px;display:flex;flex-direction:column;gap:10px}
+@media (max-width:820px){.pad{padding:14px}}
+.pad ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px;font-size:14px}
+
+/* types view */
+.tgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+@media (max-width:980px){.tgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.tgrid{grid-template-columns:minmax(0,1fr)}}
+.tcard{all:unset;cursor:pointer;display:flex;flex-direction:column;gap:10px;padding:16px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);transition:transform .15s,border-color .15s}
+.tcard:hover{transform:translateY(-2px);border-color:var(--accent)}
+.tcard .hd{display:flex;align-items:center;gap:10px}
+.tcard .mono-badge{width:38px;height:38px;font-size:13px;background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.tcard h3{font-size:15px}
+.tcard small{color:var(--muted);font-size:12px}
+.tcard p{font-size:13.5px}
+.strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+.strip span{font-size:11px;line-height:1.25;padding:5px 6px;border-radius:7px;background:color-mix(in srgb,var(--c) 12%,transparent);border-top:3px solid var(--c)}
+.seenmark{margin-left:auto;font-family:var(--f-mono);font-size:10.5px;color:var(--accent)}
+
+/* defenses view */
+.legend{display:flex;flex-wrap:wrap;gap:8px}
+.legend button{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 11px;font-size:12.5px;font-weight:600;cursor:pointer}
+.legend button::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--gc)}
+.legend button[aria-pressed="false"]{opacity:.45}
+.ladder{display:flex;flex-direction:column;gap:8px}
+.rung{display:grid;grid-template-columns:230px minmax(0,1fr);gap:14px;padding:12px 14px;border-radius:var(--r);background:var(--surface);border:1px solid var(--line);border-left:6px solid var(--c)}
+@media (max-width:700px){.rung{grid-template-columns:minmax(0,1fr)}}
+.rung .rh{display:flex;flex-direction:column;gap:3px}
+.rung .rh b{font-size:14px}
+.rung .rh .n{font-family:var(--f-mono);font-size:11px;color:var(--c);font-weight:700;letter-spacing:.06em}
+.rung .rh p{font-size:12.5px;color:var(--muted)}
+.rung .chips{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
+.rung.extra{border-left-color:var(--muted);border-style:dashed}
+
+/* quiz */
+.quiz{max-width:760px;width:100%;margin:0 auto;display:flex;flex-direction:column;gap:14px}
+.qstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.qstat{padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.qstat span{font-size:11.5px;color:var(--muted)}
+.qstat b{font-family:var(--f-mono);font-size:20px;font-variant-numeric:tabular-nums}
+@media (max-width:520px){.qstats{grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}.qstat{padding:8px}.qstat b{font-size:16px}.qstat span{font-size:10.5px}}
+.qcard{padding:20px;display:flex;flex-direction:column;gap:14px}
+.qcard .sit{font-size:17px;line-height:1.45}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+@media (max-width:520px){.opts{grid-template-columns:minmax(0,1fr)}.qcard{padding:16px}.qcard .sit{font-size:16px}}
+.opt{border:1.5px solid var(--line);background:var(--surface2);border-radius:12px;padding:11px 12px;text-align:left;font-weight:600;cursor:pointer;font-size:14px}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt.ok{border-color:var(--lv0);background:color-mix(in srgb,var(--lv0) 14%,var(--surface))}
+.opt.no{border-color:var(--lv3);background:color-mix(in srgb,var(--lv3) 12%,var(--surface))}
+.opt:disabled{cursor:default}
+.fb{padding:12px 14px;border-radius:12px;background:var(--surface2);font-size:14px;display:flex;flex-direction:column;gap:4px}
+.fb b{font-family:var(--f-display);font-size:14px}
+#qfb{scroll-margin-bottom:24px}
+.qprog{height:6px;border-radius:6px;background:var(--surface2);border:1px solid var(--line);overflow:hidden}
+.qprog i{display:block;height:100%;background:var(--accent);transition:width .4s}
+.combo{font-family:var(--f-mono);font-weight:700;color:var(--accent)}
+
+/* sheet & tip */
+.scrim{position:fixed;inset:0;background:rgba(10,12,20,.38);z-index:40;opacity:0;transition:opacity .2s}
+.scrim.show{opacity:1}
+.sheet{position:fixed;z-index:41;top:0;right:0;bottom:0;width:min(460px,94vw);background:var(--surface);border-left:1px solid var(--line);box-shadow:var(--shadow);
+  display:flex;flex-direction:column;transform:translateX(102%);visibility:hidden;transition:transform .28s cubic-bezier(.2,.8,.2,1),visibility 0s linear .28s;
+  padding-top:env(safe-area-inset-top,0px);padding-right:env(safe-area-inset-right,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.sheet.show{transform:none;visibility:visible;transition-delay:0s}
+@media (max-width:700px){
+  .sheet{top:auto;left:0;width:auto;max-height:86vh;border-left:0;border-top:1px solid var(--line);border-radius:18px 18px 0 0;transform:translateY(102%);padding-left:env(safe-area-inset-left,0px)}
+  .sheet::before{content:"";width:40px;height:4px;border-radius:4px;background:var(--line);margin:8px auto 0}
+}
+.sh-head{display:flex;align-items:flex-start;gap:12px;padding:14px 18px 10px;border-bottom:1px solid var(--line)}
+.sh-head h2{font-size:19px}
+.sh-head .x{margin-left:auto;border:1px solid var(--line);background:var(--surface2);border-radius:10px;width:34px;height:34px;cursor:pointer;flex:none;font-size:18px;line-height:1}
+.sh-body{overflow-y:auto;padding:16px 18px 24px;display:flex;flex-direction:column;gap:14px}
+.sh-body .kv{display:flex;flex-direction:column;gap:3px}
+.sh-body .kv dt{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.sh-body .kv dd{margin:0;font-size:14.5px}
+.sh-body dl{margin:0;display:flex;flex-direction:column;gap:12px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;border-radius:999px;padding:3px 10px;color:#fff;background:var(--c)}
+.quote{border-left:3px solid var(--accent);padding:6px 12px;background:var(--surface2);border-radius:0 10px 10px 0;font-size:14.5px}
+.tip{position:fixed;z-index:50;max-width:300px;background:var(--ink);color:var(--bg);font-size:12.5px;line-height:1.4;padding:8px 10px;border-radius:10px;pointer-events:none;box-shadow:var(--shadow)}
+.tip b{display:block;margin-bottom:2px}
+.toasts{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:55;display:flex;flex-direction:column;gap:8px;align-items:center;width:min(440px,92vw);pointer-events:none}
+.toast{background:var(--ink);color:var(--bg);border-radius:14px;padding:10px 14px;font-size:13.5px;box-shadow:var(--shadow);animation:tin .25s ease-out;display:flex;gap:10px;align-items:flex-start;width:100%}
+.toast i{flex:none;width:10px;height:10px;border-radius:50%;margin-top:5px;background:var(--tc,var(--accent))}
+.toast b{display:block}
+@keyframes tin{from{opacity:0;transform:translateY(8px)}}
+.ach{display:grid;grid-template-columns:40px minmax(0,1fr);gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line)}
+.ach .ic{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;font-family:var(--f-mono);font-weight:700;background:var(--surface2);color:var(--muted);border:1px solid var(--line)}
+.ach.on .ic{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.ach small{color:var(--muted)}
+footer.src{font-size:12.5px;color:var(--muted)}
+footer.src ol{margin:6px 0 0;padding-left:18px;display:flex;flex-direction:column;gap:3px}
+</style>
+
+<header class="top" id="top"><div class="wrap gut">
+  <div class="brand"><b>Атлас структуры личности</b><span>типы, уровни и защиты по Нэнси Мак-Вильямс</span></div>
+  <nav class="tabs" aria-label="Разделы">
+    <a href="#schema">Схема</a><a href="#levels">Уровни</a><a href="#types">Типы</a><a href="#defenses">Защиты</a><a href="#quiz">Тренажёр</a>
+  </nav>
+  <button class="prog" id="prog" type="button" aria-label="Прогресс и достижения">
+    <svg width="34" height="34" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="15" fill="none" stroke="var(--line)" stroke-width="4"/><circle id="ring" cx="18" cy="18" r="15" fill="none" stroke="var(--accent)" stroke-width="4" stroke-linecap="round" stroke-dasharray="94.25" stroke-dashoffset="94.25" transform="rotate(-90 18 18)"/><text id="achN" x="18" y="22" text-anchor="middle" font-size="11" font-family="JetBrains Mono, monospace" font-weight="700" fill="var(--ink)">0</text></svg>
+    <span class="t"><b id="progTxt">0/50</b><span><br>изучено</span></span>
+  </button>
+</div></header>
+
+<main lang="ru"><div class="wrap gut">
+
+<section id="v-schema" class="view">
+  <div class="view-intro">
+    <div class="eyebrow">Симулятор регрессии</div>
+    <h2>Регрессия психического функционирования при стрессе</h2>
+    <ul class="howto">
+      <li><b>Выберите тип личности и базовый уровень</b> — уровень, на котором психика работает в спокойном состоянии.</li>
+      <li><b>Задайте стресс рычагом</b> слева от схемы: вниз — больше нагрузки, вверх — меньше.</li>
+      <li><b>Применяйте карты:</b> стрессоры повышают стресс, стабилизаторы снижают.</li>
+      <li><b>Следите за «Я»:</b> чем выше стресс, тем ниже уровень функционирования и тем более ранние защиты включаются.</li>
+      <li><b>Уязвимость типа:</b> стрессор, совпавший с ней, действует почти вдвое сильнее (×1.8).</li>
+      <li><b>Опора среды</b> (вкладка «Опора среды»): длительная поддерживающая среда временно поднимает функционирование выше собственной структуры. Резкое снятие опоры действует как стрессор, а длительная опора частично интернализуется и остаётся.</li>
+    </ul>
+  </div>
+
+  <div class="card ctlbar">
+    <div class="ctl-desktop">
+      <div class="ctrl"><span class="lab">Тип личности</span><div class="chiprow wrapr" id="typeRow" role="group" aria-label="Тип личности"></div></div>
+      <div class="ctrl"><span class="lab">Базовый уровень организации</span><div class="seg" id="baseSeg" role="group" aria-label="Базовый уровень"></div></div>
+    </div>
+    <div class="ctl-mobile">
+      <button type="button" class="picker" id="pickType"><span class="lab">Тип личности</span><b id="pickTypeVal">—</b><span class="car">▾</span></button>
+      <button type="button" class="picker" id="pickBase"><span class="lab">Базовый уровень</span><b id="pickBaseVal">—</b><span class="car">▾</span></button>
+    </div>
+  </div>
+
+  <div class="sim">
+    <div class="stickybox" id="stickybox">
+      <div class="stage" id="stage" aria-label="Объёмная схема уровней организации личности">
+        <div class="lever" id="lever">
+          <span class="lv-cap">Стресс</span>
+          <button type="button" class="lv-btn" id="lvLess" aria-label="Снизить стресс на 10" data-tip="Снизить стресс на 10">−</button>
+          <div class="lv-track" id="lvTrack" role="slider" tabindex="0" aria-label="Уровень стресса" aria-valuemin="0" aria-valuemax="100" aria-valuenow="35">
+            <i class="lv-tick" style="top:25%"></i><i class="lv-tick" style="top:50%"></i><i class="lv-tick" style="top:75%"></i>
+            <div class="lv-handle" id="lvHandle"><span id="lvVal">35</span></div>
+          </div>
+          <button type="button" class="lv-btn" id="lvMore" aria-label="Повысить стресс на 10" data-tip="Повысить стресс на 10">+</button>
+          <span class="lv-zone" id="lvZone">напряжение</span>
+        </div>
+        <div class="labels" id="labels"></div>
+        <div class="vp" id="vp" tabindex="0" aria-label="Схема уровней. Перетащите по горизонтали, чтобы повернуть">
+          <div class="well" id="well"></div>
+          <div class="orbit" id="orbit"></div>
+        </div>
+        <div class="gauge" aria-label="Уровень шкалы защит DSM-IV"><div class="ttl">шкала<br>защит</div><div class="gtrack" id="gtrack"></div><div class="gptr" id="gptr"></div></div>
+        <div class="hint">↔ повернуть</div>
+        <div class="lv-hint" id="lvHint" hidden>← тяните рычаг «Стресс» вниз</div>
+      </div>
+      <div class="status" id="status"></div>
+    </div>
+
+    <div class="simR">
+      <div class="ptabs" role="tablist" id="ptabs">
+        <button type="button" role="tab" data-ptab="state" aria-selected="true"><i style="--tc:var(--ink)"></i>Состояние</button>
+        <button type="button" role="tab" data-ptab="t" aria-selected="false"><i style="--tc:var(--lv3)"></i>Стрессоры ↓</button>
+        <button type="button" role="tab" data-ptab="s" aria-selected="false"><i style="--tc:var(--lv0)"></i>Стабилизаторы ↑</button>
+        <button type="button" role="tab" data-ptab="sup" aria-selected="false"><i style="--tc:var(--accent)"></i>Опора среды</button>
+      </div>
+      <div class="panel card readout" data-panel="state" id="stateBox"></div>
+      <div class="panel card pad support" data-panel="sup" id="supBox">
+        <div class="deck-h"><h3><span class="ar" style="background:var(--accent)">опора</span>Опора среды</h3><p>Длительная поддерживающая среда работает как «вспомогательное Эго»: временно поднимает функционирование выше собственной структуры и повышает порог устойчивости к стрессу. Ваша структура при этом не меняется, пока опора не интернализована.</p></div>
+        <div class="supseg" id="supSeg" role="group" aria-label="Уровень опоры среды"></div>
+        <p class="supdesc" id="supDesc"></p>
+        <div class="supstats">
+          <div><span>Подъём функционирования</span><b id="supLift">нет</b></div>
+          <div><span>Буфер стресса</span><b id="supBuf">нет</b></div>
+          <div class="wide"><span>Интернализация <span class="muted">· месяцев в среде: <b id="supMonths">0</b></span></span><b id="supIntV">0%</b><div class="bar"><i id="supInt"></i></div></div>
+        </div>
+        <div class="chiprow wrapr">
+          <button type="button" class="btn pri" id="supMonth">Прошёл месяц в этой среде</button>
+          <button type="button" class="btn danger" id="supDrop">Резко снять опору</button>
+        </div>
+        <p class="muted" style="font-size:12.5px">Постепенное снижение опоры (на одну ступень) почти не даёт отката, резкое снятие — сильный стрессор, особенно для пограничной и психотической организации. Каждый месяц в среде немного снижает стресс и переводит часть опоры в собственную структуру.</p>
+      </div>
+      <div class="panel" data-panel="t">
+        <div class="deck-h"><h3><span class="ar" style="background:var(--lv3)">+ стресс</span>Стрессоры</h3><p>Повышают нагрузку и усиливают регрессию. Метка «уязвимость» — попадание в слабое место выбранного типа.</p></div>
+        <div class="cardgrid" id="trigCards"></div>
+      </div>
+      <div class="panel" data-panel="s">
+        <div class="deck-h"><h3><span class="ar" style="background:var(--lv0)">− стресс</span>Стабилизаторы</h3><p>Снижают нагрузку и восстанавливают функционирование. Метка «точно в цель» — особенно эффективны для выбранного типа.</p></div>
+        <div class="cardgrid" id="stabCards"></div>
+      </div>
+      <div class="card pad journal">
+        <div class="loghead"><h3>Журнал сессии</h3><button class="btn" id="resetBtn" type="button">Сбросить стресс</button></div>
+        <ul class="log" id="log"></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card pad">
+    <h3>Как устроена модель</h3>
+    <p style="font-size:14px">Глубина регрессии зависит от собственной структуры: здоровая личность даже при сильном стрессе обычно задерживается на невротических и ранних пограничных защитах, а пограничная может кратковременно достигать психотического уровня. Опора среды действует в обратную сторону: пока она есть, функционирование поднимается выше собственного уровня (не больше чем примерно на уровень), а стресс бьёт слабее. Модель условная и показывает логику, а не служит инструментом диагностики.</p>
+    <p style="font-size:14px" class="muted">Регрессия обратима: стабилизаторы, время и отношения восстанавливают функционирование. Контролируемая, временная регрессия в игре, творчестве и влюблённости — признак здоровья («регрессия на службе Эго», Э. Крис).</p>
+  </div>
+
+  <div class="view-intro">
+    <div class="eyebrow">Две оси диагностики</div>
+    <h2>Матрица «тип × уровень»</h2>
+    <p>Главная идея Мак-Вильямс: тип характера и уровень организации независимы. Нарциссическая личность может быть здоровой, невротической, пограничной или психотической. Строки — типы, столбцы — уровни; выделены текущие тип и уровень из симулятора.</p>
+  </div>
+  <div class="mx-wrap"><table class="mx" id="mx"></table></div>
+  <div class="mxm" id="mxm"></div>
+</section>
+
+<section id="v-levels" class="view" hidden>
+  <div class="view-intro">
+    <div class="eyebrow">Уровни организации личности</div>
+    <h2>Четыре уровня функционирования психики</h2>
+    <p>Уровень организации описывает не «что за человек», а насколько устойчиво работает психика: целостность идентичности, проверка реальности, зрелость защит. Наведите на строку, чтобы сравнить уровни; нажмите на заголовок, чтобы открыть подробности.</p>
+  </div>
+  <div class="lvgrid" id="lvgrid"></div>
+  <div class="lvmobile" id="lvmobile"></div>
+
+  <div class="view-intro">
+    <div class="eyebrow">Механика</div>
+    <h2>Механизм регрессии</h2>
+  </div>
+  <div class="flow">
+    <div class="card step" style="--sc:var(--lv0)"><b>Стрессор</b><p>Событие, особенно совпавшее с ключевым конфликтом типа: утрата, унижение, вторжение, неопределённость.</p></div>
+    <div class="card step" style="--sc:var(--lv1)"><b>Рост аффекта</b><p>Тревога, стыд, гнев или страх превышают то, что психика может переработать.</p></div>
+    <div class="card step" style="--sc:var(--lv1)"><b>Привычные защиты не справляются</b><p>Юмор, планирование, интеллектуализация перестают снижать напряжение.</p></div>
+    <div class="card step" style="--sc:var(--lv2)"><b>Активируются более ранние</b><p>Психика переходит к защитам, которые сильнее снижают тревогу, но больше искажают картину.</p></div>
+    <div class="card step" style="--sc:var(--lv3)"><b>Цена регрессии</b><p>Страдают проверка реальности, целостность «Я», способность видеть себя со стороны и отношения.</p></div>
+    <div class="card step" style="--sc:var(--lv0)"><b>Восстановление</b><p>Удерживающая среда, ресурсы тела, называние чувств и время возвращают функционирование на прежний уровень.</p></div>
+  </div>
+  <div class="two">
+    <div class="card pad"><h3>От чего зависит глубина</h3><ul>
+      <li><b>Базовый уровень</b> — на какую организацию психика опирается в спокойном состоянии.</li>
+      <li><b>Совпадение с уязвимостью типа</b>: критика для нарциссической личности, вторжение для шизоидной, утрата для депрессивной.</li>
+      <li><b>Сила и длительность</b> стресса; накопление нескольких стрессоров.</li>
+      <li><b>Ресурсы тела</b>: сон, болезнь, алкоголь.</li>
+      <li><b>Наличие удерживающей среды</b> — людей и структур, которые выдерживают аффект.</li>
+    </ul></div>
+    <div class="card pad"><h3>Признаки регрессии со стороны</h3><ul>
+      <li>Исчезают оттенки: люди и события становятся «только хорошими» или «только плохими».</li>
+      <li>Обсуждение сменяется обвинением, слова — действиями.</li>
+      <li>Пропадает способность посмотреть на себя со стороны.</li>
+      <li>Люди превращаются в функции: «спаситель», «враг», «предатель».</li>
+      <li>У собеседника появляются несвойственные ему сильные чувства — признак проективной идентификации.</li>
+    </ul></div>
+  </div>
+  <div class="card pad"><h3>Опора среды: компенсация, а не излечение</h3><ul>
+      <li><b>Структура и функционирование различаются.</b> Уровень организации — относительно устойчивая черта; текущее функционирование колеблется вокруг него. В PDM-2 это две оси: P (личность, уровень организации) и M (12 способностей психики «здесь и сейчас»).</li>
+      <li><b>Вспомогательное Эго.</b> Терапевт или среда временно берут на себя функции, которых не хватает: проверку реальности, регуляцию аффекта, структуру, границы (П. Федерн; поддерживающая психотерапия).</li>
+      <li><b>Порог устойчивости.</b> В модели «уязвимость — стресс — защитные факторы» (Zubin & Spring; Nuechterlein & Dawson) поддержка и структура повышают порог декомпенсации. Исследования «выраженных эмоций» показали: в критичной или гиперопекающей семье рецидивы психоза заметно чаще.</li>
+      <li><b>Заёмное функционирование ограничено.</b> Психотическая организация в хорошей среде может быть годами компенсирована и выглядеть почти как пограничная, но уязвимость остаётся.</li>
+      <li><b>Утрата опоры — стрессор.</b> Отпуск терапевта, демобилизация, пенсия, утрата партнёра, распад структуры на работе дают откат, иногда ниже исходного уровня. Постепенное, обсуждаемое завершение переносится легче.</li>
+      <li><b>Интернализация.</b> Долгая и последовательная опора постепенно становится внутренней способностью («трансмутирующая интернализация», Х. Кохут); в исследовании Уоллерстайна поддерживающая терапия давала устойчивые структурные изменения чаще, чем ожидалось.</li>
+      <li><b>Организация как контейнер.</b> Ясные роли, правила и ритуалы работают как заёмная структура (Э. Жак; И. Мензис-Лит), поэтому реорганизации и хаотичные изменения чаще всего вызывают регрессию у сотрудников с более хрупкой организацией.</li>
+    </ul></div>
+  <footer class="card pad src">
+    <b style="color:var(--ink)">Источники</b>
+    <ol>
+      <li>McWilliams N. Psychoanalytic Diagnosis: Understanding Personality Structure in the Clinical Process. 2nd ed. New York: Guilford Press, 2011. Рус. пер. 1-го изд.: Мак-Вильямс Н. Психоаналитическая диагностика. М.: Класс, 1998.</li>
+      <li>Lingiardi V., McWilliams N. (eds.) Psychodynamic Diagnostic Manual (PDM-2). New York: Guilford Press, 2017.</li>
+      <li>Kernberg O. Severe Personality Disorders: Psychotherapeutic Strategies. New Haven: Yale University Press, 1984.</li>
+      <li>Vaillant G. E. Ego Mechanisms of Defense: A Guide for Clinicians and Researchers. Washington: APA Press, 1992.</li>
+      <li>American Psychiatric Association. DSM-IV-TR, Appendix B: Defensive Functioning Scale. 2000.</li>
+      <li>Kris E. Psychoanalytic Explorations in Art. New York: IUP, 1952 — регрессия на службе Эго.</li>
+      <li>Federn P. Ego Psychology and the Psychoses. New York: Basic Books, 1952 — вспомогательное Эго.</li>
+      <li>Zubin J., Spring B. Vulnerability — a new view of schizophrenia // Journal of Abnormal Psychology. 1977. 86(2): 103–126; Nuechterlein K. H., Dawson M. E. A heuristic vulnerability/stress model of schizophrenic episodes // Schizophrenia Bulletin. 1984. 10(2): 300–312.</li>
+      <li>Butzlaff R. L., Hooley J. M. Expressed emotion and psychiatric relapse: a meta-analysis // Archives of General Psychiatry. 1998. 55: 547–552.</li>
+      <li>Main T. F. The hospital as a therapeutic institution // Bulletin of the Menninger Clinic. 1946. 10: 66–70.</li>
+      <li>Kohut H. The Analysis of the Self. New York: IUP, 1971; Wallerstein R. S. Forty-Two Lives in Treatment. New York: Guilford, 1986.</li>
+      <li>Jaques E. Social systems as a defence against persecutory and depressive anxiety, 1955; Menzies Lyth I. The functioning of social systems as a defence against anxiety // Human Relations. 1960. 13: 95–121.</li>
+      <li>Winnicott D. W. The Theory of the Parent-Infant Relationship, 1960 — удерживающая среда; Bion W. Learning from Experience, 1962 — контейнирование.</li>
+    </ol>
+    <p style="margin-top:6px">Учебная схема. Модель регрессии упрощена и не предназначена для диагностики.</p>
+  </footer>
+</section>
+
+<section id="v-types" class="view" hidden>
+  <div class="view-intro">
+    <div class="eyebrow">Ось характера</div>
+    <h2>Девять типов личности</h2>
+    <p>Типы описывают устойчивый стиль: центральную тему, предпочитаемые защиты, характерные чувства и реакции, которые человек вызывает у других. Это не ярлыки: черты нескольких типов есть у каждого, а внизу карточки видно, как тип выглядит на четырёх уровнях.</p>
+  </div>
+  <div class="tgrid" id="tgrid"></div>
+</section>
+
+<section id="v-defenses" class="view" hidden>
+  <div class="view-intro">
+    <div class="eyebrow">Защитные механизмы</div>
+    <h2>Лестница защит</h2>
+    <p>Ступени — уровни шкалы защитного функционирования DSM-IV, сверху вниз от самых адаптивных к психотическим. Цвет точки — группа по Мак-Вильямс. Наведите на защиту, чтобы увидеть суть; нажмите, чтобы открыть пример и проявления в команде.</p>
+  </div>
+  <div class="legend" id="legend"></div>
+  <div class="ladder" id="ladder"></div>
+  <p class="muted" style="font-size:13px">Классификации расходятся: например, диссоциацию Мак-Вильямс относит к первичным защитам, а шкала DSM-IV — к уровню психических торможений. Регрессия как отдельная защита — частный случай механизма, который показывает симулятор.</p>
+</section>
+
+<section id="v-quiz" class="view" hidden>
+  <div class="view-intro">
+    <div class="eyebrow">Тренажёр</div>
+    <h2>Узнайте защиту по ситуации</h2>
+    <p>Раунд — 12 ситуаций из жизни и работы. Серия верных ответов умножает очки.</p>
+  </div>
+  <div class="quiz" id="quiz"></div>
+</section>
+
+</div></main>
+
+<div class="mini" id="mini" aria-label="Краткое состояние симулятора">
+  <button type="button" class="bc" id="miniBand" aria-label="Вернуться к схеме">—</button>
+  <span class="ml">стресс</span>
+  <div class="mtrack" id="miniTrack"><i></i></div>
+  <span class="mv" id="miniVal">35</span>
+  <button type="button" class="lv-btn" id="miniLess" aria-label="Снизить стресс на 10">−</button>
+  <button type="button" class="lv-btn" id="miniMore" aria-label="Повысить стресс на 10">+</button>
+</div>
+<div class="scrim" id="scrim" hidden></div>
+<aside class="sheet" id="sheet" aria-modal="true" role="dialog" aria-labelledby="shTitle">
+  <div class="sh-head"><div id="shHead"></div><button class="x" id="shClose" type="button" aria-label="Закрыть">×</button></div>
+  <div class="sh-body" id="shBody"></div>
+</aside>
+<div class="tip" id="tip" hidden></div>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script>
+/* ---------- DATA ---------- */
+const LEVELS = [
+ {id:0, name:"Здоровый", short:"здоровый", tagline:"Гибкость: защиты есть, но не управляют жизнью",
+  rows:{
+   identity:"Целостная и устойчивая; разные стороны себя переживаются как свои.",
+   reality:"Сохранно, в том числе под нагрузкой.",
+   defenses:"Зрелые и гибкие: юмор, сублимация, антиципация, подавление. Под нагрузкой — вторичные, с быстрым возвратом.",
+   conflict:"Обычные жизненные противоречия; они осознаются и решаются.",
+   observing:"Высокая способность посмотреть на себя со стороны.",
+   relations:"Близость и автономия совмещаются; другой видится целостным и отдельным.",
+   transfer:"Лёгкий рабочий альянс; обратная связь воспринимается как информация.",
+   counter:"Интерес, лёгкость, ощущение партнёрства.",
+   request:"Развитие, поиск смысла, трудный жизненный этап."},
+  markers:["Юмор и самоирония","Может сказать «я ошибся»","Оттенки в оценках людей и событий"],
+  note:"Во 2-м издании книги Мак-Вильямс описывает континуум от здорового уровня через невротический и пограничный к психотическому."},
+ {id:1, name:"Невротический", short:"невротический", tagline:"Конфликт внутри: «хочу» против «нельзя»",
+  rows:{
+   identity:"Интегрирована: себя и других человек описывает объёмно.",
+   reality:"Сохранно.",
+   defenses:"Преимущественно вторичные: вытеснение, изоляция аффекта, интеллектуализация, рационализация, реактивное образование, смещение.",
+   conflict:"Внутренний: между желанием и запретом (эдипов уровень) — соперничество, вина, стыд за желания.",
+   observing:"Есть; симптомы эго-дистонны: «это мне мешает, хочу понять».",
+   relations:"Устойчивые отношения с повторяющимися сценариями.",
+   transfer:"Заметен, но его можно обсуждать как «похоже на…»; альянс складывается легко.",
+   counter:"Спокойный и умеренный; работать приятно.",
+   request:"«Застреваю в повторяющемся»: тревога, вина, торможения, трудности в близости или карьере."},
+  markers:["Многословные «правильные» объяснения","Оговорки и забывания","Повторяющиеся сценарии"],
+  note:""},
+ {id:2, name:"Пограничный", short:"пограничный", tagline:"Дилемма: близость поглощает, дистанция бросает",
+  rows:{
+   identity:"Диффузная: противоречивые образы себя не сведены воедино; трудно ответить «какой я?».",
+   reality:"В целом сохранно, но в близких отношениях и под стрессом — искажения; критичность к своим реакциям снижена.",
+   defenses:"Первичные: расщепление, проективная идентификация, идеализация и обесценивание, отрицание, всемогущий контроль, отыгрывание.",
+   conflict:"Сепарация-индивидуация: страх поглощения при близости и покинутости при дистанции.",
+   observing:"Ограничено; проблемы эго-синтонны: «дело в них».",
+   relations:"Интенсивные и нестабильные; другой — то спаситель, то враг.",
+   transfer:"Интенсивный, переживается как реальность.",
+   counter:"Сильный и меняющийся: раздражение, тревога, беспомощность, желание спасать или отвергнуть.",
+   request:"Кризисы в отношениях, импульсивность, пустота, «все меня подводят»."},
+  markers:["Чёрно-белые оценки","Резкие развороты в отношении к людям","Действие вместо слов","Собеседника будто «втягивают» в роль"],
+  note:"По Кернбергу различают высокопограничный уровень (ближе к неврозу: сохранна работоспособность, временами — объёмное видение) и низкопограничный (ближе к психозу: хаос, саморазрушение, короткие эпизоды искажения реальности)."},
+ {id:3, name:"Психотический", short:"психотический", tagline:"Вопрос не «чего я хочу», а «существую ли я»",
+  rows:{
+   identity:"Глубоко нарушена; размыта граница «я — не-я».",
+   reality:"Нарушено в декомпенсации (бред, галлюцинации); в компенсации может быть сохранно годами.",
+   defenses:"Первичные в крайней форме и психотические: уход во внутренний мир, отрицание, бредовая проекция, психотическое искажение.",
+   conflict:"Экзистенциальный: безопасность, выживание, страх уничтожения или поглощения.",
+   observing:"Очень ограничено, особенно в обострении.",
+   relations:"Слияние или отгороженность; доверие даётся с огромным трудом.",
+   transfer:"Слияние; специалист может стать частью внутренней, в том числе бредовой, картины.",
+   counter:"Глубокое сочувствие, ощущение то всемогущества, то полного бессилия; иногда страх.",
+   request:"Часто обращается окружение; нужна психиатрическая помощь."},
+  markers:["Странности речи и логики","Утрата общей с другими реальности","Страх распада, «чужеродность» переживаний"],
+  note:"Психотический уровень организации — не то же самое, что психоз прямо сейчас."}
+];
+const CRITERIA = [
+ ["identity","Идентичность"],["reality","Тестирование реальности"],["defenses","Ведущие защиты"],
+ ["conflict","Основной конфликт"],["observing","Наблюдающее Эго"],["relations","Отношения"],
+ ["transfer","Перенос"],["counter","Контрперенос"],["request","С чем обращаются"]
+];
+
+const DEF = {
+ sublimation:{n:"Сублимация", g:"mature", s:"Импульс получает социально ценную форму.", p:"от напряжения влечений, которые нельзя выразить прямо", e:"Злость на несправедливость стала адвокатской практикой.", w:"Соперничество направлено в продукт и результат, а не на коллег."},
+ humor:{n:"Юмор", g:"mature", s:"Видит смешное в трудном, не отрицая боли.", p:"от непереносимой серьёзности боли и страха", e:"«Ну что ж, теперь у меня есть отличная история для мемуаров».", w:"Разряжает напряжение на совещании, не обесценивая проблему."},
+ altruism:{n:"Альтруизм", g:"mature", s:"Забота о других приносит удовлетворение и не требует жертвовать собой.", p:"от собственной беспомощности и тревоги", e:"Пережив банкротство, бесплатно консультирует начинающих предпринимателей.", w:"Наставничество и поддержка новичков."},
+ anticipation:{n:"Антиципация", g:"mature", s:"Заранее проживает трудное и готовится к нему.", p:"от внезапности и паники", e:"Перед встречей с инвестором проговорил худшие вопросы и свою реакцию на них.", w:"Сценарии рисков, план Б."},
+ suppression:{n:"Подавление", g:"mature", s:"Сознательно откладывает переживание до подходящего момента.", p:"от перегрузки в неподходящий момент", e:"«Сейчас переговоры. Расстроюсь вечером».", w:"Сохраняет фокус в кризисе и возвращается к чувствам позже."},
+ affiliation:{n:"Аффилиация", g:"mature", s:"Обращается за поддержкой, не перекладывая ответственность.", p:"от одиночества с проблемой", e:"Позвонил другу и прямо сказал, как ему страшно.", w:"Открыто просит совета у коллег и супервизора."},
+
+ repression:{n:"Вытеснение", g:"secondary", s:"Неприемлемое желание или воспоминание удерживается вне сознания.", p:"от тревоги и вины, связанных с желанием или воспоминанием", e:"Не может вспомнить имя человека, который его когда-то унизил.", w:"«Забывает» о неприятной задаче или договорённости."},
+ regression:{n:"Регрессия", g:"secondary", s:"Возврат к более ранним, детским способам реагирования.", p:"от тревоги взрослой ответственности", e:"Заболев, взрослый мужчина капризничает и требует ухода, как маленький.", w:"Под давлением сотрудник ждёт, что руководитель «всё решит»."},
+ isolation:{n:"Изоляция аффекта", g:"secondary", s:"Событие помнится, чувство к нему отделено.", p:"от силы чувства", e:"Ровным голосом: «Отец умер, когда мне было двенадцать. Что ещё?»", w:"Сообщает об увольнениях как о «техническом вопросе»."},
+ intellectualization:{n:"Интеллектуализация", g:"secondary", s:"О чувствах говорят на языке понятий.", p:"от эмоциональной уязвимости", e:"Вместо горя — рассуждения о стадиях проживания утраты.", w:"Разговор о конфликте уходит в модели и фреймворки."},
+ rationalization:{n:"Рационализация", g:"secondary", s:"Находится приемлемое объяснение вместо настоящего мотива.", p:"от стыда и разочарования", e:"«Не взяли — и хорошо, там всё равно платят мало».", w:"Провал проекта объясняют «рынком», а не своими решениями."},
+ moralization:{n:"Морализация", g:"secondary", s:"Желания и поступки переводятся в категории долга и правильности.", p:"от вины и сомнений", e:"«Я обязан был так поступить, это вопрос принципа» — о выгодном ему решении.", w:"Жёсткие решения подаются как «принципиальная позиция»."},
+ compartmentalization:{n:"Раздельное мышление", g:"secondary", s:"Противоречивые установки сосуществуют, не сталкиваясь.", p:"от внутреннего противоречия", e:"Искренне религиозен и спокойно обманывает партнёров.", w:"Декларируемые ценности компании и реальные практики живут параллельно."},
+ undoing:{n:"Аннулирование", g:"secondary", s:"Действие символически «отменяет» чувство или поступок.", p:"от вины за агрессию", e:"После ссоры — цветы и поведение, будто ничего не было.", w:"После жёсткого разноса — внезапная премия всему отделу."},
+ turning:{n:"Обращение против себя", g:"secondary", s:"Агрессия к другому направляется на себя.", p:"от страха потерять отношения из-за своей злости", e:"«Это я виновата, что он на меня накричал».", w:"После несправедливой критики винит себя и перерабатывает."},
+ displacement:{n:"Смещение", g:"secondary", s:"Чувство переадресовано более безопасному объекту.", p:"от опасности прямого конфликта", e:"Получив разнос от начальника, срывается на стажёре или дома.", w:"Конфликт с собственником «выливается» на подрядчиков."},
+ reaction:{n:"Реактивное образование", g:"secondary", s:"Чувство превращается в противоположное.", p:"от неприемлемого чувства", e:"Подчёркнуто сладкая любезность к коллеге, которого втайне не выносит.", w:"Демонстративная лояльность после понижения."},
+ reversal:{n:"Реверсия", g:"secondary", s:"Смена роли в сценарии: делает для другого то, что хотел бы получить сам.", p:"от собственной нужды в заботе", e:"Нуждаясь в заботе, окружает заботой всех вокруг.", w:"Руководитель опекает команду и не позволяет заботиться о себе."},
+ identification:{n:"Идентификация", g:"secondary", s:"Присвоение черт значимого другого, в том числе — идентификация с агрессором.", p:"от бессилия и страха перед значимым другим", e:"Став начальником, говорит с подчинёнными тоном своего жёсткого бывшего шефа.", w:"Новые руководители воспроизводят стиль тех, кто их «ломал»."},
+ actingout:{n:"Отреагирование вовне", sh:"Отреагирование", g:"secondary", s:"Чувство выражается действием, минуя осознание.", p:"от непереносимого напряжения и беспомощности", e:"Вместо разговора об обиде — хлопает дверью и уходит в загул.", w:"Демонстративный уход с совещания, импульсивное увольнение."},
+ sexualization:{n:"Сексуализация", g:"secondary", s:"Тревога или травматичный опыт переживаются через сексуальное возбуждение.", p:"от страха, беспомощности, травмы", e:"Страх перед властным человеком превращается во флирт с ним.", w:"Напряжённые переговоры «уходят» во флирт."},
+
+ withdrawal:{n:"Примитивная изоляция", sh:"Уход в себя", g:"primary", s:"Уход во внутренний мир от переполняющей стимуляции.", p:"от вторжения и перегрузки", e:"На шумном совещании «уплывает» и не слышит вопросов.", w:"В конфликте молча исчезает из чатов и встреч."},
+ denial:{n:"Отрицание", g:"primary", s:"Неприятная реальность не признаётся.", p:"от непереносимой правды", e:"«Я пью как все. Проблемы нет».", w:"«Компания не в кризисе» при падающих продажах."},
+ omnipotent:{n:"Всемогущий контроль", sh:"Всемогущество", g:"primary", s:"Ощущение, что можно контролировать всё и всех.", p:"от беспомощности", e:"Уверен, что одним письмом «перевоспитает» коллектив, и злится, когда реальность не слушается.", w:"Микроменеджмент и ставка на собственную исключительность."},
+ idealization:{n:"Примитивная идеализация", sh:"Идеализация", g:"primary", s:"Другой видится совершенным и всесильным.", p:"от тревоги и беспомощности: «есть тот, кто защитит»", e:"«Новый директор — гений, он всех спасёт».", w:"Культ основателя, ожидание консультанта-спасителя."},
+ devaluation:{n:"Обесценивание", g:"primary", s:"Оборотная сторона идеализации: разочаровав, другой становится ничтожным.", p:"от разочарования, зависти и стыда", e:"Через месяц тот же директор — «пустое место».", w:"Резкие развороты в оценке подрядчиков и сотрудников."},
+ projection:{n:"Проекция", g:"primary", s:"Своё неприемлемое чувство приписывается другому.", p:"от признания собственных чувств", e:"«Это не я злюсь — это вы на меня злитесь».", w:"«Все вокруг хотят нас подсидеть»."},
+ introjection:{n:"Интроекция", g:"primary", s:"Чужое отношение принимается внутрь как своё, без переработки.", p:"от страха разрыва со значимым другим", e:"Ребёнок, которого постоянно ругали, взрослым говорит себе: «Я никчёмный».", w:"Присваивает оценку токсичного руководителя: «Наверное, я правда бездарь»."},
+ projid:{n:"Проективная идентификация", sh:"Проект. идентификация", g:"primary", s:"Спроецированное чувство вызывается в другом: тот начинает его переживать и действовать соответственно.", p:"от непереносимых чувств, которые «выгружаются» в другого", e:"Клиент, ожидающий отвержения, держится так холодно, что консультант ловит у себя желание закончить встречу.", w:"Руководитель, уверенный в нелояльности команды, своим контролем делает её нелояльной."},
+ splitting:{n:"Расщепление", g:"primary", s:"Мир делится на только хороших и только плохих; противоречивые образы не соединяются.", p:"от тревоги амбивалентности — что хорошее и плохое живут в одном человеке", e:"«Отдел продаж — команда мечты, бухгалтерия — враги».", w:"Лагеря «наших» и «чужих» внутри компании."},
+ dissociation:{n:"Диссоциация", g:"primary", s:"Непереносимое переживание отщепляется от сознания: деперсонализация, «выпадения».", p:"от непереносимой боли и ужаса", e:"«Помню аварию как будто со стороны, как в кино».", w:"После жёсткого конфликта не помнит, о чём договорились."},
+
+ delproj:{n:"Бредовая проекция", g:"psychotic", s:"Проекция становится непоколебимым убеждением, не поддающимся проверке.", p:"от угрозы распада и уничтожения", e:"Уверен, что соседи через розетки слушают его мысли.", w:"В рабочем контексте — повод бережно направить к психиатру."},
+ psydenial:{n:"Психотическое отрицание", sh:"Псих. отрицание", g:"psychotic", s:"Отрицание очевидной внешней реальности.", p:"от непереносимой реальности утраты", e:"Отрицает смерть близкого и накрывает на него стол.", w:"Требует психиатрической помощи."},
+ distortion:{n:"Психотическое искажение", sh:"Псих. искажение", g:"psychotic", s:"Восприятие реальности перестраивается под внутренние потребности.", p:"от невыносимой реальности", e:"Убеждён в особой миссии и слышит «подтверждающие» голоса.", w:"Требует психиатрической помощи."},
+
+ passiveagg:{n:"Пассивная агрессия", g:"dsm", s:"Враждебность выражается непрямо: саботаж, «забывчивость», опоздания.", p:"от опасности открытого конфликта", e:"Соглашается со всем на совещании, а потом «не успевает».", w:"Тихий саботаж решений руководства."},
+ hrc:{n:"Жалобы с отвержением помощи", sh:"«Да, но…»", g:"dsm", s:"Жалуется и просит помощи, но отвергает любые предложения.", p:"от зависимости и гнева на тех, от кого ждёт помощи", e:"На каждый совет — «да, но…».", w:"Сотрудник, которому «ничего не помогает»."},
+ autfant:{n:"Аутистическое фантазирование", sh:"Фантазирование", g:"dsm", s:"Мечтания заменяют действия и отношения.", p:"от рисков реального контакта", e:"Часами прокручивает воображаемый разговор с обидчиком вместо реального.", w:"Блестящие планы, которые не доходят до дела."}
+};
+const GROUPS = {
+ mature:{n:"Зрелые", d:"адаптивные, по Вайланту и шкале DSM"},
+ secondary:{n:"Вторичные", d:"невротические; по Мак-Вильямс — защиты высшего порядка"},
+ primary:{n:"Первичные", d:"примитивные; по Мак-Вильямс — защиты низшего порядка"},
+ psychotic:{n:"Психотические", d:"уровень защитной дисрегуляции"},
+ dsm:{n:"Незрелые (DSM)", d:"есть в шкале DSM-IV, у Мак-Вильямс отдельно не описаны"}
+};
+const DFS = [
+ {name:"Высокий адаптивный", band:0, d:"Гибкие, осознаваемые способы справляться: напряжение перерабатывается, реальность и отношения не страдают.", ids:["sublimation","humor","altruism","anticipation","suppression","affiliation"]},
+ {name:"Психические торможения", band:1, d:"Неприятное удерживается вне сознания или отделяется от чувства. Реальность сохранна, но часть жизни «заморожена».", ids:["repression","isolation","intellectualization","undoing","displacement","reaction","dissociation"]},
+ {name:"Незначительное искажение образов", band:1, d:"Самооценка под угрозой: себя и других видят слишком хорошими или слишком плохими.", ids:["idealization","devaluation","omnipotent"]},
+ {name:"Отказ (дезавуирование)", band:2, d:"Неприятное не признаётся или приписывается другим.", ids:["denial","projection","rationalization"]},
+ {name:"Значительное искажение образов", band:2, d:"Мир раскалывается на «хороших» и «плохих»; чувства передаются другим и вызывают в них ответ.", ids:["splitting","projid","autfant"]},
+ {name:"Уровень действия", band:2, d:"Чувство уходит в поступок или уход: срыв, саботаж, жалобы с отказом от помощи.", ids:["actingout","passiveagg","hrc"]},
+ {name:"Защитная дисрегуляция", band:3, d:"Реальность перестраивается под внутреннюю угрозу. Нужна срочная помощь специалиста.", ids:["delproj","psydenial","distortion"]}
+];
+const NON_DFS = ["regression","moralization","compartmentalization","turning","reversal","identification","sexualization","introjection","withdrawal"];
+
+const TYPES = [
+ {id:"psychop", n:"Психопатический", alt:"антисоциальный", m:"Пп",
+  theme:"Власть и контроль: «переиграть», не быть зависимым и уязвимым.",
+  core:["omnipotent","actingout","projid","dissociation"],
+  affects:"Трудно выносить зависимость, стыд и зависть; скука и поиск возбуждения; низкая тревожность.",
+  relations:"Другие — средства и соперники; уважение к силе, презрение к слабости.",
+  self:"«Я сильнее и умнее правил»; за этим — страх беспомощности.",
+  counter:"Очарованность и восхищение, сменяющиеся холодком и ощущением, что тебя используют.",
+  org:"Харизматичные «рейдеры», игра на грани правил. Реагируют на силу и ясные последствия, а не на морализаторство.",
+  help:"Последовательность, неподкупность, ясные последствия; не поддаваться обаянию и не морализировать.",
+  lv:[["азарт и риск","Энергичный, азартный, любит конкуренцию и риск; играет жёстко, но по правилам; привязанности и совесть сохранны."],
+      ["срезает углы","Бравирует независимостью и «срезает углы»; под нагрузкой — манипуляции, после которых всё же возникает вина."],
+      ["манипуляции","Ложь и манипуляции — основной способ получать своё; эмпатия ситуативна, отношения — инструмент."],
+      ["холодная агрессия","Непредсказуемая холодная агрессия; мир делится на хищников и жертв; возможны параноидные идеи."]],
+  bands:[["sublimation","suppression"],["rationalization","actingout"],["omnipotent","projid","denial"],["delproj","psydenial"]]},
+ {id:"narc", n:"Нарциссический", alt:"грандиозный и уязвимый варианты", m:"Нр",
+  theme:"Самооценка: поддерживать ценность себя через признание, избегать стыда и пустоты.",
+  core:["idealization","devaluation","omnipotent"],
+  affects:"Стыд, зависть, пустота, скука; ярость при задетой самооценке.",
+  relations:"Другие — «зеркало» и источник подтверждения; трудно видеть другого отдельным человеком.",
+  self:"Колеблется между грандиозностью и ничтожностью: явный вариант — «я лучший», скрытый — ранимый и «тонкокожий».",
+  counter:"Скука, раздражение, ощущение «меня здесь нет»; или приятное попадание под идеализацию.",
+  org:"Лидеры-визионеры и «звёзды»; болезненно воспринимают обратную связь; окружение делится на гениев и бездарей.",
+  help:"Признание реальных заслуг, обратная связь без унижения, терпимость к колебаниям самооценки.",
+  lv:[["честолюбие","Здоровое честолюбие и стремление к качеству; выдерживает критику, умеет восхищаться другими."],
+      ["ранимость","Чувствителен к оценке: успехи переживаются ярко, неудачи — как стыд; периоды пустоты."],
+      ["качели «гений — ноль»","Резкие качели идеализации и обесценивания; ярость при задетом самолюбии; другие — только зеркало."],
+      ["бред величия","Грандиозные идеи вплоть до бреда величия или переживание полного уничтожения себя."]],
+  bands:[["humor","sublimation"],["rationalization","intellectualization"],["idealization","devaluation","omnipotent"],["distortion","delproj"]]},
+ {id:"schiz", n:"Шизоидный", alt:"", m:"Шз",
+  theme:"Дистанция как безопасность: тяга к близости и страх быть поглощённым.",
+  core:["withdrawal","intellectualization","autfant"],
+  affects:"Повышенная чувствительность, переполненность стимуляцией; внешне — отстранённость.",
+  relations:"Держит дистанцию; уединение — ресурс, а не наказание.",
+  self:"«Я другой, не отсюда»; оригинальность и независимость суждений.",
+  counter:"Трудно «достучаться», ощущение дистанции; или нежность и желание бережно оберегать.",
+  org:"Глубокие эксперты, исследователи, архитекторы систем; тяжело переносят open space, обязательные тимбилдинги и публичность.",
+  help:"Уважение к границам и темпу, возможность работать автономно, контакт без навязывания близости.",
+  lv:[["независимость","Независимый, оригинальный, с богатым внутренним миром; ценит уединение, но способен к близости."],
+      ["уход «в голову»","Под давлением дистанцируется и уходит «в голову»; трудно говорить о чувствах."],
+      ["изоляция","Отношения почти отсутствуют; фантазия заменяет контакт с людьми."],
+      ["разрыв с реальностью","Уход во внутренний мир с разрывом связи с реальностью; возможны нарушения мышления."]],
+  bands:[["sublimation","anticipation"],["intellectualization","isolation"],["withdrawal","autfant"],["distortion","withdrawal"]]},
+ {id:"para", n:"Параноидный", alt:"", m:"Пр",
+  theme:"Угроза извне: мир опасен, унижение возможно в любой момент — нужно быть начеку.",
+  core:["projection","denial","reaction"],
+  affects:"Страх, гнев, стыд; собственная вина ощущается как чужое обвинение.",
+  relations:"Недоверие, проверки на лояльность, поиск скрытых мотивов.",
+  self:"Уязвимость и одновременно всемогущество: «всё вокруг связано со мной».",
+  counter:"Ощущение, что любое слово будет использовано против; желание оправдываться; страх.",
+  org:"Охранители, аудиторы, специалисты по рискам. При регрессе — «охота на ведьм» и поиск предателей.",
+  help:"Прозрачность и предсказуемость, прямота без иронии, признание реальных угроз, уважение достоинства.",
+  lv:[["бдительность","Бдительный, видит риски, ценит справедливость и прямоту; проверяет, но может довериться."],
+      ["подозрительность","Под стрессом подозрителен и обидчив, ищет скрытый смысл, но способен перепроверить."],
+      ["поиск врагов","Устойчивое недоверие, поиск врагов и «заговоров»; ярость при ощущении унижения."],
+      ["бред преследования","Бред преследования и отношения: всё происходящее направлено против него."]],
+  bands:[["anticipation","humor"],["reaction","displacement"],["projection","denial","projid"],["delproj"]]},
+ {id:"depr", n:"Депрессивный", alt:"и маниакальный", m:"Дп",
+  theme:"Утрата и вина: «во мне что-то плохое». Маниакальный вариант — бегство от этой мысли в активность.",
+  core:["introjection","turning","idealization","denial"],
+  affects:"Печаль, вина, стыд, пустота; гнев обращён на себя. У маниакального — приподнятость, скрывающая горе.",
+  relations:"Страх потерять, угождение, самопожертвование, чувствительность к отвержению.",
+  self:"«Я недостаточно хорош»; другие видятся лучше себя.",
+  counter:"Нежность и желание поддержать; иногда тяжесть и усталость. С маниакальным — увлечённость и истощение.",
+  org:"Добросовестные, самокритичные, берут вину на себя; высокий риск выгорания. Маниакальный — «двигатель» с внезапными спадами.",
+  help:"Поддержка без обвинений, признание вклада, внимание к окончаниям и утратам, разрешение на гнев.",
+  lv:[["глубина","Глубина, эмпатия, ответственность; способен горевать и восстанавливаться."],
+      ["самокритика","Самокритика и вина, склонность отвечать за всё; спады после потерь. Маниакальный вариант — бегство в дела."],
+      ["пустота","Тяжёлые эпизоды пустоты и самообвинения, самоповреждение; маниакальные «взлёты» с отрицанием проблем."],
+      ["бредовая вина","Бредовая вина и ощущение собственной «испорченности» или маниакальное всемогущество."]],
+  bands:[["altruism","sublimation"],["turning","moralization"],["introjection","splitting","denial"],["distortion"]]},
+ {id:"masoch", n:"Мазохистический", alt:"саморазрушительный", m:"Мз",
+  theme:"Страдание ради привязанности: «я терплю, чтобы меня не бросили и признали правым».",
+  core:["turning","actingout","moralization","denial"],
+  affects:"Неосознаваемый гнев, обида, вина; страдание с оттенком морального превосходства.",
+  relations:"Позиция жертвы; ожидание, что страдание заметят; невольное провоцирование.",
+  self:"«Меня недооценивают»; «я хороший, потому что терплю».",
+  counter:"Раздражение и даже желание «наказать»; или беспомощность спасателя, чьи советы не работают.",
+  org:"«Вечно перегруженный»: берёт на себя больше всех, жалуется и отказывается от помощи.",
+  help:"Не спасать и не обвинять; замечать вклад без страданий; помогать говорить о гневе напрямую.",
+  lv:[["самоотдача","Готов терпеть ради значимой цели; умеет остановиться и попросить помощи."],
+      ["взваливает лишнее","Берёт на себя лишнее и жалуется; невольно провоцирует несправедливость к себе."],
+      ["саморазрушение","Саморазрушительное поведение, отношения с насилием; страдание как способ удержать другого."],
+      ["бредовая жертвенность","Бредовые идеи наказания и жертвы, тяжёлое самоповреждение."]],
+  bands:[["altruism","suppression"],["turning","moralization"],["actingout","introjection","hrc"],["distortion"]]},
+ {id:"obs", n:"Обсессивно-компульсивный", alt:"", m:"ОК",
+  theme:"Контроль и правильность: конфликт гнева и подчинения. Обсессивный думает вместо чувств, компульсивный — делает.",
+  core:["isolation","intellectualization","undoing","reaction"],
+  affects:"Подавленный гнев, стыд, вина, страх потерять контроль.",
+  relations:"Борьба за власть и правила; трудно с неопределённостью и спонтанностью.",
+  self:"«Я должен быть правильным и безупречным».",
+  counter:"Скука, раздражение, ощущение «нет чувств»; желание «пробить» броню.",
+  org:"Процессы, качество, точность; перфекционизм ведёт к прокрастинации и затяжным согласованиям.",
+  help:"Структура и ясные правила, время на решение, мягкое приглашение к чувствам без давления.",
+  lv:[["надёжность","Надёжный, точный, системный, добросовестный; способен к спонтанности."],
+      ["перфекционизм","Перфекционизм, сомнения, прокрастинация; ритуалы и навязчивые мысли под стрессом."],
+      ["жёсткий контроль","Ригидный контроль других и жёсткие ритуалы; вспышки гнева при нарушении порядка."],
+      ["магическое мышление","Навязчивости переходят в бредовые идеи; магическое мышление."]],
+  bands:[["anticipation","sublimation"],["isolation","intellectualization","undoing","reaction"],["omnipotent","splitting"],["distortion"]]},
+ {id:"hyst", n:"Истерический", alt:"театральный", m:"Ис",
+  theme:"Безопасность через привлекательность: сила — у других, своя ценность нуждается в отклике.",
+  core:["repression","regression","sexualization","actingout"],
+  affects:"Тревога; яркие, но переменчивые эмоции.",
+  relations:"Идеализация и разочарование, соблазнение и отступление.",
+  self:"«Я маленький; сила и ценность — у других».",
+  counter:"Увлечённость и желание спасти; или раздражение «театральностью».",
+  org:"Заряжает энергией, силён в презентациях и коммуникациях; драматизирует конфликты.",
+  help:"Тёплое внимание при ясных границах, признание реальной компетентности, спокойный тон в кризисе.",
+  lv:[["выразительность","Тёплый, выразительный, эмпатичный; увлекает других, яркая эмоциональность."],
+      ["драматизация","Драматизация, тревога в ситуациях власти и близости; соблазнение и отступление."],
+      ["эмоциональные бури","Бурные отношения и эмоциональные бури, импульсивность, выраженное отыгрывание."],
+      ["истерический психоз","Тяжёлые диссоциативные и конверсионные состояния, вплоть до истерического психоза."]],
+  bands:[["humor","altruism"],["repression","regression","sexualization"],["actingout","dissociation","idealization"],["distortion","dissociation"]]},
+ {id:"diss", n:"Диссоциативный", alt:"", m:"Дс",
+  theme:"Выживание при травме: непереносимое отщепляется, чтобы можно было жить дальше.",
+  core:["dissociation","withdrawal"],
+  affects:"Ужас, стыд, онемение; резкие переключения состояний.",
+  relations:"Колебания между доверием и настороженностью; трудно рассказать о себе связно.",
+  self:"Фрагментарное: «части меня», провалы в памяти.",
+  counter:"Очарованность, сомнение («правда ли это?»), растерянность.",
+  org:"Высокая функциональность в кризисе; внезапные «выпадения», трудно вспомнить договорённости.",
+  help:"Безопасность и предсказуемость, заземление, бережный темп, без давления на воспоминания.",
+  lv:[["поглощённость","Способен глубоко погружаться в дело; высокая гипнабельность и креативность."],
+      ["выпадения","Эпизоды «выпадения» и деперсонализации под стрессом; провалы памяти о болезненном."],
+      ["переключения","Частые диссоциативные состояния и переключения, трудно связно рассказать о себе."],
+      ["фрагментация","Тяжёлая фрагментация, переживания, похожие на психоз («голоса» частей); важно отличать от шизофрении."]],
+  bands:[["suppression","sublimation"],["repression","dissociation"],["dissociation","withdrawal"],["distortion"]]}
+];
+
+const TRIGGERS = [
+ {id:"crit", n:"Публичная критика", d:"Оценка при свидетелях задевает самооценку и достоинство.", v:16, vuln:["narc","para","psychop"]},
+ {id:"loss", n:"Утрата, расставание", d:"Потеря значимого человека, роли или проекта.", v:20, vuln:["depr","masoch","hyst"]},
+ {id:"reject", n:"Игнорирование", d:"Отвержение, отсутствие отклика и внимания.", v:15, vuln:["hyst","depr","narc"]},
+ {id:"intrude", n:"Навязанная близость", d:"Вторжение в личное пространство, требование эмоциональной открытости.", v:14, vuln:["schiz","para"]},
+ {id:"chaos", n:"Хаос и неопределённость", d:"Нет правил, планов и ясности, что будет дальше.", v:15, vuln:["obs","para"]},
+ {id:"control", n:"Ограничение и подчинение", d:"Потеря свободы манёвра, жёсткие рамки сверху.", v:14, vuln:["psychop","obs"]},
+ {id:"trauma", n:"Травматическое напоминание", d:"Крик, угроза, ситуация, похожая на прошлую травму.", v:18, vuln:["diss","hyst"]},
+ {id:"secret", n:"Слухи за спиной", d:"Скрытность, закрытые встречи, перестановки без объяснений.", v:13, vuln:["para"]},
+ {id:"mistake", n:"Ошибка на виду", d:"Собственный промах, который заметили другие.", v:13, vuln:["obs","narc"]},
+ {id:"success", n:"Успех и признание", d:"Парадоксальный триггер для тех, кому успех кажется незаслуженным.", v:8, vuln:["masoch","depr"]},
+ {id:"fatigue", n:"Недосып и перегрузка", d:"Истощает ресурсы Эго у всех, без исключения.", v:18, vuln:[]},
+ {id:"alcohol", n:"Алкоголь, вещества", d:"Ослабляют контроль и тестирование реальности.", v:22, vuln:[]}
+];
+const STABS = [
+ {id:"holding", n:"Удерживающая среда", d:"Тёплый предсказуемый контакт, в котором можно быть разным (Винникотт).", v:18, bonus:["depr","hyst","masoch","diss"]},
+ {id:"sleep", n:"Сон и тело", d:"Восстановление базовых ресурсов: сон, еда, движение.", v:14, bonus:[]},
+ {id:"structure", n:"Структура и границы", d:"Понятные правила, роли и последствия.", v:14, bonus:["obs","psychop"]},
+ {id:"mentalize", n:"Назвать чувство", d:"Ментализация: «я злюсь, потому что…» — чувство становится мыслью.", v:15, bonus:["narc","hyst"]},
+ {id:"reality", n:"Проверка фактов", d:"Прозрачность, открытая информация, сверка с реальностью.", v:14, bonus:["para"]},
+ {id:"space", n:"Пространство", d:"Уважение границ и возможность побыть одному.", v:13, bonus:["schiz"]},
+ {id:"recognition", n:"Признание", d:"Уважение и замеченный вклад без лести.", v:13, bonus:["narc"]},
+ {id:"grounding", n:"Заземление", d:"Опора на тело и настоящий момент: стопы, дыхание, предметы вокруг.", v:14, bonus:["diss"]},
+ {id:"therapy", n:"Терапия, супервизия", d:"Работа со специалистом; при психотическом уровне — с психиатром.", v:20, bonus:[]}
+];
+
+const QUIZ = [
+ {q:"«Да, меня не взяли. Если честно, там и платят мало, и расти некуда».", a:"rationalization", o:["denial","intellectualization","devaluation"], why:"Находится приемлемое объяснение, которое снимает боль отказа; настоящее чувство (обида) остаётся в тени."},
+ {q:"Получив разнос от собственника, директор весь день срывается на стажёрах.", a:"displacement", o:["projection","actingout","turning"], why:"Гнев переадресован более безопасному объекту."},
+ {q:"Ровным голосом: «Отец умер, когда мне было двенадцать. Это просто факт биографии».", a:"isolation", o:["denial","repression","suppression"], why:"Событие помнится, а чувство к нему отделено."},
+ {q:"Месяц назад новый директор был «гением, который всех спасёт», сегодня — «пустое место».", a:"devaluation", o:["rationalization","projection","reaction"], why:"Идеализация сменилась обесцениванием: оттенков между «всё» и «ничто» нет."},
+ {q:"«Это не я на вас злюсь — это вы на меня злитесь».", a:"projection", o:["projid","denial","displacement"], why:"Своё чувство приписано другому. Если бы другой и правда начал злиться под влиянием этого, речь шла бы о проективной идентификации."},
+ {q:"Клиент, ожидающий отвержения, держится так холодно, что консультант замечает у себя раздражение и желание поскорее закончить встречу.", a:"projid", o:["projection","devaluation","withdrawal"], why:"Ожидание вызвано в другом: консультант начинает чувствовать и почти делать то, чего клиент боится."},
+ {q:"«Я пью как все. Никакой проблемы нет», — после третьего за месяц прогула.", a:"denial", o:["rationalization","suppression","repression"], why:"Очевидная неприятная реальность не признаётся."},
+ {q:"Подчёркнуто сладкая любезность к коллеге, которого втайне терпеть не может.", a:"reaction", o:["suppression","isolation","undoing"], why:"Неприемлемое чувство превращено в противоположное."},
+ {q:"После резкой ссоры — цветы, ужин и поведение, будто ничего не было.", a:"undoing", o:["reaction","denial","reversal"], why:"Действие символически «отменяет» агрессию и вину за неё."},
+ {q:"«Отдел продаж — команда мечты, а бухгалтерия — сплошные враги».", a:"splitting", o:["projection","idealization","displacement"], why:"Мир разделён на только хороших и только плохих."},
+ {q:"«Помню аварию, как будто смотрел на себя со стороны, всё было как в кино».", a:"dissociation", o:["isolation","repression","withdrawal"], why:"Непереносимое переживание отщеплено: деперсонализация."},
+ {q:"Вместо разговора о разводе — увлечённая лекция о теории привязанности и стадиях горя.", a:"intellectualization", o:["rationalization","isolation","sublimation"], why:"О чувствах говорят на языке понятий."},
+ {q:"Чувствуя гнев на мать, говорит: «Это я плохая дочь, не умею её порадовать».", a:"turning", o:["introjection","reaction","moralization"], why:"Агрессия, адресованная другому, обращена на себя."},
+ {q:"Хирург после тяжёлой смены шутит о трудном случае с коллегами — и остаётся сочувствующим.", a:"humor", o:["denial","isolation","intellectualization"], why:"Смешное найдено в тяжёлом без отрицания боли — зрелая защита."},
+ {q:"«Сейчас переговоры. Расстроюсь вечером, когда будет время».", a:"suppression", o:["repression","denial","isolation"], why:"Переживание сознательно отложено, а не вытеснено."},
+ {q:"Перед встречей с инвестором проговорил самые неприятные вопросы и заранее прожил своё волнение.", a:"anticipation", o:["intellectualization","omnipotent","rationalization"], why:"Трудное прожито заранее, вместе с чувствами."},
+ {q:"Вспыльчивость и соревновательность он направил в бокс и хирургию.", a:"sublimation", o:["displacement","actingout","reaction"], why:"Импульс получил социально ценную форму."},
+ {q:"Вместо разговора об обиде — хлопает дверью и уходит в загул.", a:"actingout", o:["displacement","regression","passiveagg"], why:"Чувство выражено действием, минуя осознание и слова."},
+ {q:"Руководитель уверен, что одним письмом «перевоспитает» весь коллектив, и злится, когда этого не происходит.", a:"omnipotent", o:["idealization","denial","projection"], why:"Ощущение, что можно управлять всем, защищает от беспомощности."},
+ {q:"Не может вспомнить имя человека, который когда-то его унизил, хотя всех остальных из той компании помнит.", a:"repression", o:["suppression","denial","dissociation"], why:"Болезненное удерживается вне сознания без сознательного усилия."},
+ {q:"Уверен, что соседи через розетки слушают его мысли.", a:"delproj", o:["projection","distortion","splitting"], why:"Проекция стала непоколебимым убеждением, не поддающимся проверке."},
+ {q:"«Я обязан был так поступить — это вопрос принципа», — о решении, которое было ему очень выгодно.", a:"moralization", o:["rationalization","reaction","intellectualization"], why:"Мотив переведён в категории долга. Рационализация искала бы «разумную» причину, морализация ищет «правильную»."},
+ {q:"Заболев, взрослый мужчина капризничает и требует, чтобы за ним ухаживали, как за маленьким.", a:"regression", o:["actingout","hrc","reversal"], why:"Возврат к более ранним способам реагирования."},
+ {q:"На каждый совет: «Да, но…» — и снова жалобы.", a:"hrc", o:["passiveagg","denial","devaluation"], why:"Просьба о помощи сочетается с отвержением любой помощи."},
+ {q:"На совещании соглашается со всеми решениями, а потом «не успевает» их выполнить.", a:"passiveagg", o:["undoing","suppression","hrc"], why:"Несогласие выражено непрямо — через саботаж."},
+ {q:"Став руководителем, говорит с подчинёнными тем же унизительным тоном, каким когда-то говорил с ним его шеф.", a:"identification", o:["introjection","displacement","reversal"], why:"Идентификация с агрессором: черты значимого другого присвоены."}
+];
+
+const ACH = [
+ {id:"dive", n:"Первое погружение", d:"Применить первый триггер"},
+ {id:"vuln", n:"Точка уязвимости", d:"Попасть триггером в уязвимость типа"},
+ {id:"return", n:"Возвращение", d:"Опуститься хотя бы на уровень и вернуться на базовый"},
+ {id:"bottom", n:"Дно шкалы", d:"Дойти до 7-го уровня шкалы защит"},
+ {id:"types", n:"Картограф", d:"Открыть все 9 типов"},
+ {id:"levels", n:"Четыре этажа", d:"Открыть все 4 уровня организации"},
+ {id:"defs", n:"Коллекционер защит", d:"Открыть 20 карточек защит"},
+ {id:"streak5", n:"Серия 5", d:"5 верных ответов подряд в тренажёре"},
+ {id:"perfect", n:"Без ошибок", d:"Пройти раунд тренажёра без единой ошибки"},
+ {id:"borrowed", n:"Заёмная опора", d:"Поднять функционирование выше собственного уровня с помощью опоры среды"},
+ {id:"internal", n:"Интернализация", d:"Довести интернализацию опоры до 50%"}
+];
+const SUPPORT = [
+ {v:0, n:"Нет", d:"Нет устойчивой поддерживающей среды."},
+ {v:33, n:"Минимальная", d:"Редкие встречи, нестабильная поддержка близких."},
+ {v:66, n:"Устойчивая", d:"Регулярная терапия, поддерживающие близкие с низким уровнем критики, ясная структура работы."},
+ {v:100, n:"Интенсивная", d:"Терапевтическое сообщество, дневной стационар, плотная структура дня."}
+];
+
+/* ---------- APP ---------- */
+(function(){
+const $ = s => document.querySelector(s);
+const TYPE = Object.fromEntries(TYPES.map(t => [t.id, t]));
+const LVC = ["var(--lv0)","var(--lv1)","var(--lv2)","var(--lv3)"];
+const LV_SHORT = ["Здор.","Невр.","Погр.","Псих."];
+const GC = g => `var(--g-${g})`;
+const DFS_OF = {}; DFS.forEach((r,i)=>r.ids.forEach(id=>DFS_OF[id]=i+1));
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const fine = () => matchMedia("(hover: hover) and (pointer: fine)").matches;
+const phone = () => innerWidth <= 820;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+
+function load(k, d){ try{ const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; }catch(e){ return d; } }
+function save(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+
+/* ---------- state ---------- */
+const BASE_D = [0.15, 1.0, 2.0, 2.75];
+const MAX_D  = [1.75, 2.45, 2.9, 3.0];
+const ZONES = [[0,"покой",0],[25,"напряжение",1],[50,"перегрузка",2],[75,"кризис",3]];
+const S = {
+  type:"narc", base:1, stress:35, rz:-32, panel:"t",
+  shown:null, band:null, dfs:null, deepest:null,
+  log:[], last:null, mxType:"narc", mxLevel:null,
+  seen:new Set(load("atlas-seen", [])),
+  ach:new Set(load("atlas-ach", [])),
+  best:load("atlas-best", 0),
+  leverUsed:load("atlas-lever", false),
+  support:0, internal:0, months:0
+};
+const TOTAL = TYPES.length + LEVELS.length + Object.keys(DEF).length;
+
+/* Support (auxiliary ego): lifts functioning above own structure while present and buffers stress.
+   Internalization: part of a sustained support becomes own structure and stays after it is withdrawn. */
+const LIFT = [0.1, 0.4, 0.75, 0.9];
+const ownD = () => Math.max(0.05, BASE_D[S.base] - S.internal*0.5);
+const liftOf = () => S.support/100 * LIFT[S.base];
+const depthOf = () => {
+  const b = S.base, sp = S.support/100, t = Math.pow(S.stress/100, 1.25);
+  const bd = ownD(), md = MAX_D[b] - S.internal*0.35;
+  return clamp(bd - sp*LIFT[b] + (md - bd)*t*(1 - 0.35*sp), 0, 3);
+};
+const bandOf = d => d < 0.55 ? 0 : d < 1.55 ? 1 : d < 2.5 ? 2 : 3;
+const dfsOf = d => { const th=[0.55,1.2,1.5,1.8,2.2,2.5]; let i=0; while(i<th.length && d>=th[i]) i++; return i+1; };
+const zoneOf = v => ZONES.filter(z=>v>=z[0]).pop();
+
+/* ---------- progress & achievements ---------- */
+function markSeen(key){
+  if(S.seen.has(key)) return;
+  S.seen.add(key); save("atlas-seen", [...S.seen]);
+  const cnt = p => [...S.seen].filter(k=>k.startsWith(p)).length;
+  if(cnt("type:")>=TYPES.length) unlock("types");
+  if(cnt("level:")>=LEVELS.length) unlock("levels");
+  if(cnt("def:")>=20) unlock("defs");
+  renderProgress();
+}
+function unlock(id){
+  if(S.ach.has(id)) return;
+  S.ach.add(id); save("atlas-ach", [...S.ach]);
+  const a = ACH.find(x=>x.id===id);
+  toast(`Достижение: ${a.n}`, a.d, "var(--accent)");
+  renderProgress();
+}
+function renderProgress(){
+  const n = S.seen.size, f = Math.min(1, n/TOTAL);
+  $("#ring").setAttribute("stroke-dashoffset", (94.25*(1-f)).toFixed(2));
+  $("#progTxt").textContent = `${n}/${TOTAL}`;
+  $("#achN").textContent = S.ach.size;
+}
+
+/* ---------- toasts, tips, floats ---------- */
+function toast(title, text, color){
+  const t = document.createElement("div");
+  t.className = "toast"; t.style.setProperty("--tc", color || "var(--accent)");
+  t.innerHTML = `<i></i><div><b>${esc(title)}</b>${text ? esc(text) : ""}</div>`;
+  $("#toasts").appendChild(t);
+  setTimeout(()=>{ t.style.transition="opacity .3s"; t.style.opacity="0"; setTimeout(()=>t.remove(), 320); }, 3400);
+  while($("#toasts").children.length > (phone() ? 2 : 3)) $("#toasts").firstChild.remove();
+}
+function floatBy(node, text, color){
+  const r = node.getBoundingClientRect();
+  const f = document.createElement("div");
+  f.className = "float"; f.textContent = text; f.style.color = color;
+  f.style.left = (r.right + 6) + "px"; f.style.top = (r.top + r.height/2) + "px";
+  document.body.appendChild(f); setTimeout(()=>f.remove(), 1150);
+}
+const tip = $("#tip");
+document.addEventListener("pointerover", e => {
+  if(!fine()) return;
+  const n = e.target.closest("[data-tip]"); if(!n){ tip.hidden = true; return; }
+  const [h, b] = n.dataset.tip.split("||");
+  tip.innerHTML = b ? `<b>${esc(h)}</b>${esc(b)}` : esc(h);
+  tip.hidden = false;
+  const r = n.getBoundingClientRect(), tw = tip.offsetWidth, th = tip.offsetHeight;
+  let x = r.left + r.width/2 - tw/2; x = clamp(x, 8, innerWidth - tw - 8);
+  let y = r.top - th - 8; if(y < 8) y = r.bottom + 8;
+  tip.style.left = x + "px"; tip.style.top = y + "px";
+});
+document.addEventListener("scroll", () => { tip.hidden = true; }, {passive:true});
+
+/* ---------- chips ---------- */
+function dchip(id, extra){
+  const d = DEF[id];
+  return `<button type="button" class="dchip ${extra||""}" style="--gc:${GC(d.g)}" data-open="def:${id}" data-tip="${esc(d.n)}||${esc(d.s)}">${esc(d.sh || d.n)}</button>`;
+}
+
+/* ---------- 3D stage ---------- */
+const well = $("#well"), vp = $("#vp"), stage = $("#stage");
+let plates = [], orb, geo = {ps:200, gap:70};
+function buildStage(){
+  well.innerHTML = "";
+  plates = LEVELS.map((L,i) => {
+    const p = document.createElement("div");
+    p.className = "plate"; p.style.setProperty("--c", LVC[i]);
+    well.appendChild(p); return p;
+  });
+  orb = document.createElement("div"); orb.className = "orb"; orb.textContent = "Я";
+  well.appendChild(orb);
+  $("#labels").innerHTML = LEVELS.map((L,i)=>`<button type="button" class="lbl" style="--c:${LVC[i]}" data-open="level:${i}" data-tip="${esc(L.name)} уровень||${esc(L.tagline)}"><b>${L.name}</b><span>${esc(L.tagline.split(":")[0])}</span></button>`).join("");
+  $("#gtrack").innerHTML = DFS.map((r,i)=>`<div style="background:${LVC[r.band]}" data-tip="Уровень защит ${i+1}. ${esc(r.name)}||${esc(r.d)}">${i+1}</div>`).join("");
+  for(let i=0;i<9;i++){
+    const v = document.createElement("i"); v.className="vesicle";
+    const s = 4 + Math.random()*7;
+    Object.assign(v.style,{width:s+"px",height:s+"px",left:(10+Math.random()*80)+"%",bottom:(-20-Math.random()*200)+"px",animationDuration:(14+Math.random()*16)+"s",animationDelay:(-Math.random()*20)+"s"});
+    vp.appendChild(v);
+  }
+}
+function layoutStage(){
+  const w = vp.clientWidth || 260, m = phone();
+  const ps = clamp(w*(m?0.72:0.74), 120, 210);
+  const gap = ps*(m?0.34:0.36);
+  geo = {ps, gap};
+  const h = Math.max(m ? 270 : 330, Math.round(ps*0.74 + 3*gap*0.87 + (m?56:70)));
+  stage.style.height = h + "px";
+  well.style.setProperty("--ps", ps+"px");
+  plates.forEach((p,i)=>p.style.setProperty("--z", ((1.5-i)*gap)+"px"));
+  well.style.setProperty("--rz", S.rz+"deg");
+  placeLabels(); placeOrb(S.shown ?? depthOf());
+}
+function placeLabels(){
+  const sr = stage.getBoundingClientRect();
+  const lb = [...$("#labels").children];
+  plates.forEach((p,i)=>{ const r = p.getBoundingClientRect(); lb[i].style.top = (r.top + r.height/2 - sr.top) + "px"; });
+  const gt = $("#gtrack").getBoundingClientRect();
+  S._gt = {top: gt.top - sr.top, h: gt.height};
+}
+function placeOrb(d){
+  well.style.setProperty("--oz", ((1.5 - d) * geo.gap)+"px");
+  orb.style.setProperty("--oc", LVC[bandOf(d)]);
+  orb.style.setProperty("--glow", (S.stress/100*24)+"px");
+  orb.style.setProperty("--supr", (S.support/100*12)+"px");
+  orb.style.setProperty("--supa", (S.support*0.32)+"%");
+  const vr = vp.getBoundingClientRect(), or = orb.getBoundingClientRect();
+  const o = $("#orbit");
+  o.style.left = (or.left + or.width/2 - vr.left) + "px";
+  o.style.top = (or.top + or.height/2 - vr.top) + "px";
+  if(S._gt) $("#gptr").style.top = (S._gt.top + (dfsOf(d)-0.5)/7*S._gt.h - 1) + "px";
+}
+function renderOrbit(){
+  const t = TYPE[S.type], b = bandOf(depthOf());
+  const ids = t.bands[b].slice(0, vp.clientWidth < 300 ? 2 : 3);
+  const pos = [["0px","-34px","-50%,-100%"],["0px","34px","-50%,0"],["30px","0px","0,-50%"]];
+  $("#orbit").innerHTML = ids.map((id,k)=>`<span class="chip" style="left:${pos[k][0]};top:${pos[k][1]};transform:translate(${pos[k][2]});animation-delay:${-k*1.3}s">${dchip(id)}</span>`).join("");
+}
+let raf = null;
+function animate(){
+  const target = depthOf();
+  if(S.shown === null || reduce){ S.shown = target; placeOrb(target); raf=null; return; }
+  const step = () => {
+    S.shown += (target - S.shown) * 0.12;
+    if(Math.abs(target - S.shown) < 0.003) S.shown = target;
+    placeOrb(S.shown);
+    raf = S.shown === target ? null : requestAnimationFrame(step);
+  };
+  if(raf) cancelAnimationFrame(raf);
+  raf = requestAnimationFrame(step);
+}
+let drag = null;
+vp.addEventListener("pointerdown", e => { if(e.target.closest("button")) return; drag = {x:e.clientX, rz:S.rz}; vp.setPointerCapture(e.pointerId); });
+vp.addEventListener("pointermove", e => { if(!drag) return; S.rz = drag.rz + (e.clientX - drag.x)*0.45; well.style.setProperty("--rz", S.rz+"deg"); placeLabels(); placeOrb(S.shown); });
+vp.addEventListener("pointerup", () => { drag = null; });
+vp.addEventListener("pointercancel", () => { drag = null; });
+vp.addEventListener("keydown", e => {
+  if(e.key==="ArrowLeft"||e.key==="ArrowRight"){ S.rz += e.key==="ArrowLeft" ? -8 : 8; well.style.setProperty("--rz", S.rz+"deg"); placeLabels(); placeOrb(S.shown); e.preventDefault(); }
+});
+
+/* ---------- stress lever ---------- */
+const track = $("#lvTrack"), handle = $("#lvHandle");
+function leverUsed(){
+  if(S.leverUsed) return;
+  S.leverUsed = true; save("atlas-lever", true); $("#lvHint").hidden = true;
+}
+function renderLever(){
+  const v = Math.round(S.stress), z = zoneOf(v);
+  track.style.setProperty("--p", v + "%");
+  $("#lvVal").textContent = v;
+  track.setAttribute("aria-valuenow", v);
+  track.setAttribute("aria-valuetext", `${v}, ${z[1]}`);
+  handle.style.setProperty("--hc", LVC[z[2]]);
+  $("#lvZone").textContent = z[1];
+  $("#lvZone").style.setProperty("--zc", LVC[z[2]]);
+  $("#lvHint").hidden = S.leverUsed;
+  $("#miniTrack").style.setProperty("--p", v + "%");
+  $("#miniVal").textContent = v;
+}
+let pend = false;
+function setStress(v, opts){
+  S.stress = clamp(Math.round(v), 0, 100);
+  renderLever();
+  if(opts && opts.msg) S.last = opts.msg;
+  if(pend) return; pend = true;
+  requestAnimationFrame(()=>{ pend = false; update(true); });
+}
+let ldrag = false;
+const fromY = y => { const r = track.getBoundingClientRect(); return (y - r.top) / r.height * 100; };
+track.addEventListener("pointerdown", e => { ldrag = true; track.setPointerCapture(e.pointerId); track.classList.add("dragging"); leverUsed(); setStress(fromY(e.clientY), {msg:null}); S.last = {d:"рычаг", n:"стресс задан вручную", k:"m"}; });
+track.addEventListener("pointermove", e => { if(ldrag) setStress(fromY(e.clientY)); });
+const endDrag = () => { ldrag = false; track.classList.remove("dragging"); };
+track.addEventListener("pointerup", endDrag); track.addEventListener("pointercancel", endDrag);
+track.addEventListener("keydown", e => {
+  const k = e.key; let d = 0;
+  if(k==="ArrowDown"||k==="ArrowRight") d = 5; else if(k==="ArrowUp"||k==="ArrowLeft") d = -5;
+  else if(k==="PageDown") d = 10; else if(k==="PageUp") d = -10;
+  else if(k==="Home"){ e.preventDefault(); leverUsed(); return setStress(0); } else if(k==="End"){ e.preventDefault(); leverUsed(); return setStress(100); }
+  if(d){ e.preventDefault(); leverUsed(); setStress(S.stress + d, {msg:{d:(d>0?"+":"−")+Math.abs(d), n:"рычаг", k:"m"}}); }
+});
+$("#lvLess").addEventListener("click", () => { leverUsed(); floatBy(handle, "−10", "var(--lv0)"); setStress(S.stress - 10, {msg:{d:"−10", n:"рычаг", k:"m"}}); });
+$("#lvMore").addEventListener("click", () => { leverUsed(); floatBy(handle, "+10", "var(--lv3)"); setStress(S.stress + 10, {msg:{d:"+10", n:"рычаг", k:"m"}}); });
+const mini = $("#mini");
+const target = () => mini.classList.contains("show") ? $("#miniVal") : handle;
+$("#miniLess").addEventListener("click", () => { leverUsed(); floatBy($("#miniVal"), "−10", "var(--lv0)"); setStress(S.stress - 10, {msg:{d:"−10", n:"рычаг", k:"m"}}); });
+$("#miniMore").addEventListener("click", () => { leverUsed(); floatBy($("#miniVal"), "+10", "var(--lv3)"); setStress(S.stress + 10, {msg:{d:"+10", n:"рычаг", k:"m"}}); });
+$("#miniBand").addEventListener("click", () => stage.scrollIntoView({block:"start", behavior: reduce ? "auto" : "smooth"}));
+const vis = {stage:true, sim:false};
+let io = null;
+function syncMini(){
+  const on = phone() && !$("#v-schema").hidden && !vis.stage && vis.sim;
+  mini.classList.toggle("show", on);
+  mini.inert = !on;
+}
+function observe(){
+  if(!("IntersectionObserver" in window)) return;
+  if(io) io.disconnect();
+  const hh = $("#top").offsetHeight;
+  io = new IntersectionObserver(es => {
+    es.forEach(en => { if(en.target === stage) vis.stage = en.isIntersecting; else vis.sim = en.isIntersecting; });
+    syncMini();
+  }, {rootMargin:`-${hh + 8}px 0px 0px 0px`});
+  io.observe(stage); io.observe($(".simR"));
+}
+
+/* ---------- controls: chips on desktop, pickers on phones ---------- */
+function renderControls(){
+  const t = TYPE[S.type], L = LEVELS[S.base];
+  $("#typeRow").innerHTML = TYPES.map(x=>`<button type="button" class="tchip" aria-pressed="${x.id===S.type}" data-type="${x.id}" data-tip="${esc(x.n)}||${esc(x.theme)}"><span class="mono-badge">${x.m}</span>${esc(x.n)}</button>`).join("");
+  $("#baseSeg").innerHTML = LEVELS.map((x,i)=>`<button type="button" style="--c:${LVC[i]}" aria-pressed="${i===S.base}" data-base="${i}" data-tip="${esc(x.name)}||${esc(x.tagline)}">${x.name}</button>`).join("");
+  $("#pickTypeVal").textContent = t.n; $("#pickTypeVal").style.setProperty("--c", "var(--accent)");
+  $("#pickBaseVal").textContent = L.name; $("#pickBaseVal").style.setProperty("--c", LVC[S.base]);
+}
+function setType(id){
+  S.type = id; S.mxType = id; S.mxLevel = null; S.internal = 0; S.months = 0; markSeen("type:"+id);
+  renderControls(); renderDecks(); update(false, true);
+  toast(`Тип: ${TYPE[id].n}`, "Метки уязвимости на картах обновлены", "var(--accent)");
+}
+function setBase(i){
+  S.base = i; S.deepest = null; S.internal = 0; S.months = 0; markSeen("level:"+i);
+  renderControls(); update(false, true);
+}
+$("#typeRow").addEventListener("click", e => { const b = e.target.closest("[data-type]"); if(b) setType(b.dataset.type); });
+$("#baseSeg").addEventListener("click", e => { const b = e.target.closest("[data-base]"); if(b) setBase(+b.dataset.base); });
+$("#pickType").addEventListener("click", () => {
+  openSheet(`<div class="eyebrow">Выбор</div><h2 id="shTitle">Тип личности</h2>`,
+   `<div class="optlist">${TYPES.map(t=>`<button type="button" data-picktype="${t.id}" aria-pressed="${t.id===S.type}"><span class="mono-badge">${t.m}</span><span><b>${esc(t.n)}</b><span class="d">${esc(t.theme)}</span></span><span class="ck">${t.id===S.type?"✓":""}</span></button>`).join("")}</div>`);
+});
+$("#pickBase").addEventListener("click", () => {
+  openSheet(`<div class="eyebrow">Выбор</div><h2 id="shTitle">Базовый уровень организации</h2>`,
+   `<p class="muted" style="font-size:14px">Уровень, на котором психика функционирует в спокойном состоянии. От него зависит, насколько глубокой может стать регрессия.</p>
+    <div class="optlist">${LEVELS.map((L,i)=>`<button type="button" data-pickbase="${i}" aria-pressed="${i===S.base}"><span class="sw" style="--c:${LVC[i]}"></span><span><b>${L.name}</b><span class="d">${esc(L.tagline)}</span></span><span class="ck">${i===S.base?"✓":""}</span></button>`).join("")}</div>`);
+});
+
+/* ---------- panel tabs (phones) ---------- */
+function setPanel(p){
+  S.panel = p;
+  document.querySelectorAll("[data-panel]").forEach(x=>x.classList.toggle("on", x.dataset.panel===p));
+  document.querySelectorAll("[data-ptab]").forEach(x=>x.setAttribute("aria-selected", x.dataset.ptab===p));
+}
+$("#ptabs").addEventListener("click", e => { const b = e.target.closest("[data-ptab]"); if(b) setPanel(b.dataset.ptab); });
+
+/* ---------- decks ---------- */
+function renderDecks(){
+  const card = (c, k) => {
+    const hot = (k==="t" ? c.vuln : c.bonus).includes(S.type);
+    const v = Math.round(c.v * (hot ? (k==="t" ? 1.8 : 1.6) : 1));
+    const kc = k==="t" ? "var(--lv3)" : "var(--lv0)";
+    const who = k==="t" ? (c.vuln.length ? " Уязвимы: " + c.vuln.map(x=>TYPE[x].n.toLowerCase()).join(", ") + "." : " Действует на всех.") : "";
+    return `<button type="button" class="pcard ${hot?"hot":""}" style="--kc:${kc}" data-apply="${k}:${c.id}" data-tip="${esc(c.n)}||${esc(c.d)}${who}">
+      ${hot ? `<span class="tag">${k==="t" ? "уязвимость ×1.8" : "точно в цель ×1.6"}</span>` : ""}
+      <b>${esc(c.n)}</b><p>${esc(c.d)}</p>
+      <span class="eff"><span class="v">стресс ${k==="t"?"+":"−"}${v}</span><span class="wt"><i style="width:${clamp(v/40*100,8,100)}%"></i></span></span></button>`;
+  };
+  $("#trigCards").innerHTML = TRIGGERS.map(c=>card(c,"t")).join("");
+  $("#stabCards").innerHTML = STABS.map(c=>card(c,"s")).join("");
+}
+function fly(from, text, color, done){
+  const b = target().getBoundingClientRect();
+  const a = from.getBoundingClientRect();
+  if(reduce || b.bottom < 0 || b.top > innerHeight){ done(); return; }
+  const f = document.createElement("div");
+  f.className = "flyer"; f.textContent = text; f.style.setProperty("--fc", color);
+  document.body.appendChild(f);
+  const fw = f.offsetWidth, fh = f.offsetHeight;
+  const x0 = a.left + a.width/2 - fw/2, y0 = a.top + a.height/2 - fh/2;
+  const x1 = b.left + b.width/2 - fw/2, y1 = b.top + b.height/2 - fh/2;
+  const xm = (x0 + x1)/2, ym = Math.min(y0, y1) - 50;
+  const anim = f.animate([
+    {transform:`translate(${x0}px,${y0}px) scale(1)`, opacity:1},
+    {transform:`translate(${xm}px,${ym}px) scale(1.15)`, opacity:1, offset:.5},
+    {transform:`translate(${x1}px,${y1}px) scale(.7)`, opacity:.3}
+  ], {duration:620, easing:"cubic-bezier(.3,.7,.3,1)"});
+  anim.onfinish = () => { f.remove(); done(); };
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-apply]"); if(!b) return;
+  const [k, id] = b.dataset.apply.split(":");
+  const c = (k==="t" ? TRIGGERS : STABS).find(x=>x.id===id);
+  const hot = (k==="t" ? c.vuln : c.bonus).includes(S.type);
+  const delta = Math.round(c.v * (hot ? (k==="t" ? 1.8 : 1.6) : 1));
+  const sign = k==="t" ? "+" : "−", col = k==="t" ? "var(--lv3)" : "var(--lv0)";
+  b.classList.remove("pulse"); void b.offsetWidth; b.classList.add("pulse");
+  leverUsed();
+  fly(b, sign + delta, col, () => {
+    if(k==="t"){ unlock("dive"); if(hot) unlock("vuln"); }
+    floatBy(target(), sign + delta, col);
+    const msg = {d:sign+delta, n:c.n, k, hit:hot, fresh:true};
+    S.log.unshift(msg);
+    setStress(S.stress + (k==="t" ? delta : -delta), {msg});
+    requestAnimationFrame(()=>requestAnimationFrame(()=>S.log.forEach(x=>{ x.fresh = false; })));
+  });
+});
+
+/* ---------- main update ---------- */
+function update(fromStress, silent){
+  const d = depthOf(), band = bandOf(d), dfs = dfsOf(d), t = TYPE[S.type], L = LEVELS[band], R = DFS[dfs-1];
+  const baseBand = bandOf(ownD());
+  if(S.deepest === null) S.deepest = band;
+  if(S.band !== null && band !== S.band && !silent){
+    const down = band > S.band;
+    toast(`${down ? "Регрессия" : "Восстановление"}: ${LEVELS[S.band].short} → ${L.short} уровень`, down ? "Активируются более ранние защиты, проверка реальности ослабевает." : "Возвращаются более зрелые способы справляться.", LVC[band]);
+    plates[band].classList.remove("ripple"); void plates[band].offsetWidth; plates[band].classList.add("ripple");
+    if(S.log[0] && S.log[0].fresh) S.log[0].lv = L.name;
+  }
+  if(band > S.deepest) S.deepest = band;
+  if(band === baseBand && S.deepest > baseBand && !silent){ unlock("return"); S.deepest = band; }
+  if(dfs === 7) unlock("bottom");
+  if(S.support > 0 && band < baseBand) unlock("borrowed");
+  S.band = band; S.dfs = dfs;
+  plates.forEach((p,i)=>p.classList.toggle("on", i===band));
+  [...$("#labels").children].forEach((l,i)=>l.classList.toggle("on", i===band));
+  renderLever();
+  $("#miniBand").textContent = L.name; $("#miniBand").style.setProperty("--c", LVC[band]);
+
+  const last = S.last;
+  $("#status").innerHTML = `<span class="bc" style="--c:${LVC[band]}">${L.name}</span><span class="df">защиты ${dfs}/7</span>` + (S.support ? `<span class="sp">опора ${S.support}%</span>` : "") +
+    (last ? `<span class="last"><b style="color:${last.k==="t"?"var(--lv3)":last.k==="s"?"var(--lv0)":"var(--muted)"}">${esc(last.d)}</b> ${esc(last.n)}${last.hit?(last.k==="t"?" · уязвимость":" · точно в цель"):""}</span>` : "");
+
+  const reality = clamp(100 - Math.max(0, d-1.4)*52, 5, 100);
+  const identity = clamp(100 - d*26 - Math.max(0, d-1.5)*14, 5, 100);
+  const observing = clamp(100 - d*30, 5, 100);
+  const flex = clamp(100 - d*31, 5, 100);
+  const meter = (n, v) => `<div class="meter"><div class="row"><span>${n}</span><b>${Math.round(v)}</b></div><div class="bar"><i style="width:${v}%;--mc:${v>66?"var(--lv0)":v>40?"var(--lv2)":"var(--lv3)"}"></i></div></div>`;
+  $("#stateBox").innerHTML = `
+    <div class="state-h" style="--c:${LVC[band]}"><div class="eyebrow">Функционирование сейчас</div><div class="band">${L.name}</div></div>
+    <div class="struct">
+      <span class="sl">Собственная структура</span><b style="color:${LVC[S.base]}">${LEVELS[S.base].name}${baseBand<S.base?` <span style="color:${LVC[baseBand]}">→ сместилась к уровню «${LEVELS[baseBand].short}»</span>`:""}</b>
+      <span class="mode" style="--c:${band<baseBand?"var(--accent)":band>baseBand?LVC[band]:"var(--muted)"}">${band<baseBand?"заёмное функционирование: держится на опоре среды":band>baseBand?"регрессия под стрессом":"на уровне собственной структуры"}</span>
+    </div>
+    <p class="dfs">Шкала защит DSM-IV: <b>${dfs} из 7</b> — ${esc(R.name.toLowerCase())}. <span class="muted">${esc(R.d)}</span></p>
+    <div class="meters">${meter("Проверка реальности", reality)}${meter("Целостность «Я»", identity)}${meter("Наблюдающее Эго", observing)}${meter("Гибкость защит", flex)}</div>
+    <div class="blk"><h4>Активные защиты · ${esc(t.n.toLowerCase())} тип</h4><div class="chiprow wrapr">${t.bands[band].map(id=>dchip(id)).join("")}</div></div>
+    <div class="blk"><h4>Как это выглядит</h4><p>${esc(t.lv[band][1])}</p></div>
+    <div class="blk"><h4>Признаки со стороны</h4><ul class="marks">${L.markers.map(m=>`<li>${esc(m)}</li>`).join("")}</ul></div>
+    <div class="blk"><h4>Что способствует восстановлению</h4><p>${esc(t.help)}</p></div>`;
+  renderLog(); renderOrbit(); renderMatrix(); renderMxm(); renderSupport(); animate();
+}
+function renderLog(){
+  const ul = $("#log");
+  if(!S.log.length){ ul.innerHTML = `<li><span class="d muted">—</span><span class="muted">Выберите карту — здесь появится запись</span><span></span></li>`; return; }
+  ul.innerHTML = S.log.slice(0,7).map(x=>`<li><span class="d" style="color:${x.k==="t"?"var(--lv3)":"var(--lv0)"}">${x.d}</span><span>${esc(x.n)}${x.hit?` <span class="muted">· ${x.k==="t"?"уязвимость":"точно в цель"}</span>`:""}</span><span class="lv">${x.lv?"→ "+esc(x.lv):""}</span></li>`).join("");
+}
+$("#status").addEventListener("click", e => { setPanel(e.target.closest(".sp") ? "sup" : "state"); });
+$("#resetBtn").addEventListener("click", ()=>{ S.log = []; S.deepest = null; S.last = {d:"0", n:"стресс сброшен", k:"m"}; setStress(0); });
+
+/* ---------- support of the environment ---------- */
+function renderSupport(){
+  const box = $("#supBox"); if(!box) return;
+  const lift = liftOf();
+  const lvls = lift/1;
+  $("#supSeg").innerHTML = SUPPORT.map((x,i)=>`<button type="button" data-sup="${x.v}" aria-pressed="${S.support===x.v}" data-tip="${esc(x.n)}||${esc(x.d)}"><span class="bars">${[0,1,2].map(k=>`<i class="${k<i?"on":""}"></i>`).join("")}</span>${x.n}</button>`).join("");
+  const cur = SUPPORT.find(x=>x.v===S.support) || SUPPORT[0];
+  $("#supDesc").textContent = cur.d;
+  $("#supLift").textContent = S.support ? `+${lift.toFixed(2).replace(".",",")} уровня` : "нет";
+  $("#supBuf").textContent = S.support ? `−${Math.round(35*S.support/100)}%` : "нет";
+  $("#supInt").style.width = Math.round(S.internal*100) + "%";
+  $("#supIntV").textContent = Math.round(S.internal*100) + "%";
+  $("#supMonths").textContent = S.months;
+  $("#supDrop").disabled = !S.support;
+}
+function supportLog(d, n, k){ const m = {d, n, k, fresh:true}; S.log.unshift(m); return m; }
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-sup]"); if(!b) return;
+  const nv = +b.dataset.sup, prev = S.support; if(nv === prev) return;
+  S.support = nv;
+  if(nv < prev){
+    const steps = Math.round((prev - nv)/33);
+    const rebound = steps <= 1 ? 6 : Math.round((prev - nv)*0.35);
+    const msg = supportLog("+"+rebound, steps <= 1 ? "постепенное снижение опоры" : "быстрое снижение опоры", "t");
+    toast(steps <= 1 ? "Опора снижена постепенно" : "Опора снижена резко", steps <= 1 ? "Откат небольшой: изменение можно пережить и обсудить." : "Быстрая потеря опоры действует как стрессор.", "var(--accent)");
+    setStress(S.stress + rebound, {msg});
+  } else {
+    const msg = supportLog("опора", `опора: ${SUPPORT.find(x=>x.v===nv).n.toLowerCase()}`, "s");
+    setStress(S.stress, {msg});
+  }
+});
+$("#supDrop").addEventListener("click", () => {
+  const prev = S.support; if(!prev) return;
+  const rebound = Math.round(prev * 0.5 * (S.base >= 2 ? 1.2 : 0.8));
+  S.support = 0;
+  floatBy(target(), "+"+rebound, "var(--lv3)");
+  toast("Утрата опоры", "Резкое снятие среды действует как сильный стрессор; откат может уйти ниже исходного уровня.", "var(--lv3)");
+  const msg = supportLog("+"+rebound, "резкое снятие опоры", "t");
+  setStress(S.stress + rebound, {msg});
+});
+$("#supMonth").addEventListener("click", () => {
+  S.months++;
+  const before = S.internal;
+  if(S.support) S.internal = Math.min(1, S.internal + 0.05*S.support/100);
+  const gain = Math.round((S.internal - before)*100);
+  if(S.internal >= 0.5) unlock("internal");
+  const msg = supportLog("−4", S.support ? `месяц в среде · интернализация +${gain}%` : "месяц без опоры · интернализации нет", "s");
+  if(!S.support) toast("Без опоры интернализации нет", "Время само снижает стресс, но структура не меняется.", "var(--muted)");
+  setStress(S.stress - 4, {msg});
+});
+
+/* ---------- matrix ---------- */
+function renderMatrix(){
+  const band = S.band ?? bandOf(depthOf());
+  let h = `<colgroup><col style="width:210px"><col><col><col><col></colgroup><thead><tr><th class="rowh"><span class="eyebrow">тип \\ уровень</span></th>`;
+  h += LEVELS.map((L,i)=>`<th class="lvh ${i===band?"col":""}" style="--c:${LVC[i]}"><button type="button" style="all:unset;cursor:pointer" data-open="level:${i}"><b>${L.name}</b><span>${esc(L.tagline.split(":")[0])}</span></button></th>`).join("");
+  h += `</tr></thead><tbody>`;
+  TYPES.forEach(t=>{
+    const cur = t.id===S.type;
+    h += `<tr class="${cur?"cur":""}"><th class="rowh"><button type="button" data-open="type:${t.id}"><span class="mono-badge">${t.m}</span><span><b>${esc(t.n)}</b><small>${esc(t.theme.split(":")[0])}</small></span></button></th>`;
+    h += t.lv.map((x,i)=>`<td class="${cur&&i===band?"here":""}" style="--c:${LVC[i]}"><button type="button" data-open="cell:${t.id}:${i}"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></button></td>`).join("");
+    h += `</tr>`;
+  });
+  $("#mx").innerHTML = h + `</tbody>`;
+}
+function renderMxm(){
+  const band = S.band ?? bandOf(depthOf());
+  const mt = S.mxType, ml = S.mxLevel ?? (mt===S.type ? band : null);
+  let g = `<div class="card mmap"><span class="eyebrow" style="font-size:9.5px">тип</span>` + LEVELS.map((L,i)=>`<span class="hd" style="--c:${LVC[i]}">${LV_SHORT[i]}</span>`).join("");
+  TYPES.forEach(t=>{
+    g += `<button type="button" class="rl" data-mxt="${t.id}" aria-pressed="${t.id===mt}"><span class="mono-badge">${t.m}</span><span class="n">${esc(t.n)}</span></button>`;
+    g += LEVELS.map((L,i)=>`<button type="button" class="c ${t.id===mt?"selrow":""} ${t.id===mt&&i===ml?"sel":""} ${t.id===S.type&&i===band?"me":""}" style="--c:${LVC[i]}" data-mxt="${t.id}" data-mxl="${i}" aria-label="${esc(t.n)}, ${esc(L.short)} уровень"></button>`).join("");
+  });
+  const t = TYPE[mt];
+  if(ml !== null) g += `<div class="mmsel" style="--c:${LVC[ml]}"><i></i><span>${S.mxLevel===null ? "Сейчас в симуляторе" : "Выбрано"}: <b>${esc(t.n)} · ${esc(LEVELS[ml].short)} уровень</b> — описание ниже</span></div>`;
+  g += `</div>`;
+  g += `<div class="mxcards ${ml!==null?"has-sel":""}"><div class="deck-h"><h3>${esc(t.n)} тип на четырёх уровнях</h3><p>«Я» на мини-карте — текущее положение в симуляторе.</p></div>` +
+    t.lv.map((x,i)=>`<div class="card mxc ${i===ml?"sel":""}" style="--c:${LVC[i]}" role="button" tabindex="0" data-open="cell:${t.id}:${i}"><div class="hd2"><small>${esc(LEVELS[i].short)}</small><b>${esc(x[0])}</b><span class="selb">${S.mxLevel===null ? "сейчас" : "выбрано"}</span></div><p>${esc(x[1])}</p></div>`).join("") +
+    `<button type="button" class="btn pri" data-sim="${t.id}">Открыть этот тип в симуляторе</button></div>`;
+  $("#mxm").innerHTML = g;
+}
+$("#mxm").addEventListener("click", e => {
+  const b = e.target.closest("[data-mxt]"); if(!b) return;
+  S.mxType = b.dataset.mxt; S.mxLevel = b.dataset.mxl !== undefined ? +b.dataset.mxl : null;
+  renderMxm();
+  if(S.mxLevel !== null){ const c = $("#mxm .mxc.sel"); if(c) c.scrollIntoView({block:"nearest", behavior: reduce ? "auto" : "smooth"}); }
+});
+
+/* ---------- levels view ---------- */
+function renderLevels(){
+  let g = `<div class="crit" style="background:var(--surface2)"></div>` + LEVELS.map((L,i)=>`<div class="h" style="--c:${LVC[i]}"><button type="button" data-open="level:${i}"><b>${L.name}</b><span>${esc(L.tagline)}</span></button></div>`).join("");
+  CRITERIA.forEach(([k,n])=>{ g += `<div class="crit" data-row="${k}">${n}</div>` + LEVELS.map(L=>`<div data-row="${k}">${esc(L.rows[k])}</div>`).join(""); });
+  $("#lvgrid").innerHTML = g;
+  $("#lvgrid").addEventListener("pointerover", e => {
+    const c = e.target.closest("[data-row]"); const k = c && c.dataset.row;
+    $("#lvgrid").querySelectorAll("[data-row]").forEach(x=>x.classList.toggle("hl", x.dataset.row===k));
+  });
+  $("#lvgrid").addEventListener("pointerleave", () => $("#lvgrid").querySelectorAll(".hl").forEach(x=>x.classList.remove("hl")));
+  $("#lvmobile").innerHTML = LEVELS.map((L,i)=>`<div class="card lvcard" style="--c:${LVC[i]}"><div><h3 style="color:var(--c)">${L.name}</h3><span class="muted" style="font-size:13px">${esc(L.tagline)}</span></div><dl>${CRITERIA.slice(0,5).map(([k,n])=>`<div><dt>${n}</dt><dd>${esc(L.rows[k])}</dd></div>`).join("")}</dl><button type="button" class="btn" data-open="level:${i}">Перенос, контрперенос, запрос →</button></div>`).join("");
+}
+
+/* ---------- types view ---------- */
+function renderTypes(){
+  $("#tgrid").innerHTML = TYPES.map(t=>`<button type="button" class="tcard" data-open="type:${t.id}">
+    <div class="hd"><span class="mono-badge">${t.m}</span><div><h3>${esc(t.n)}</h3>${t.alt?`<small>${esc(t.alt)}</small>`:""}</div>${S.seen.has("type:"+t.id)?'<span class="seenmark">изучен</span>':""}</div>
+    <p>${esc(t.theme)}</p>
+    <div class="chiprow wrapr">${t.core.map(id=>`<span class="dchip" style="--gc:${GC(DEF[id].g)}">${esc(DEF[id].sh||DEF[id].n)}</span>`).join("")}</div>
+    <div class="strip">${t.lv.map((x,i)=>`<span style="--c:${LVC[i]}">${esc(x[0])}</span>`).join("")}</div>
+  </button>`).join("");
+}
+
+/* ---------- defenses view ---------- */
+const FILTER = new Set(Object.keys(GROUPS));
+function renderDefenses(){
+  $("#legend").innerHTML = Object.entries(GROUPS).map(([g,x])=>`<button type="button" style="--gc:${GC(g)}" aria-pressed="${FILTER.has(g)}" data-group="${g}" data-tip="${esc(x.n)}||${esc(x.d)}">${esc(x.n)}</button>`).join("");
+  const chip = id => dchip(id, FILTER.has(DEF[id].g) ? "" : "dim");
+  $("#ladder").innerHTML = DFS.map((r,i)=>`<div class="rung" style="--c:${LVC[r.band]}"><div class="rh"><span class="n">УРОВЕНЬ ${i+1} · ${LEVELS[r.band].short.toUpperCase()}</span><b>${esc(r.name)}</b><p>${esc(r.d)}</p></div><div class="chips">${r.ids.map(chip).join("")}</div></div>`).join("")
+    + `<div class="rung extra"><div class="rh"><span class="n" style="color:var(--muted)">ВНЕ ШКАЛЫ DSM</span><b>Описаны у Мак-Вильямс</b><p>Отдельной ступени в шкале DSM-IV у этих защит нет.</p></div><div class="chips">${NON_DFS.map(chip).join("")}</div></div>`;
+}
+$("#legend").addEventListener("click", e => {
+  const b = e.target.closest("[data-group]"); if(!b) return;
+  const g = b.dataset.group;
+  if(FILTER.has(g) && FILTER.size > 1) FILTER.delete(g); else FILTER.add(g);
+  renderDefenses();
+});
+
+/* ---------- sheet ---------- */
+const sheet = $("#sheet"), scrim = $("#scrim");
+sheet.inert = true;
+function openSheet(head, body){
+  $("#shHead").innerHTML = head; $("#shBody").innerHTML = body; $("#shBody").scrollTop = 0;
+  scrim.hidden = false; requestAnimationFrame(()=>{ scrim.classList.add("show"); sheet.classList.add("show"); });
+  sheet.inert = false; tip.hidden = true;
+  setTimeout(()=>$("#shClose").focus({preventScroll:true}), 50);
+}
+function closeSheet(){
+  sheet.classList.remove("show"); scrim.classList.remove("show"); sheet.inert = true;
+  setTimeout(()=>{ scrim.hidden = true; }, 220);
+}
+$("#shClose").addEventListener("click", closeSheet);
+scrim.addEventListener("click", closeSheet);
+document.addEventListener("keydown", e => { if(e.key==="Escape") closeSheet(); });
+const kv = (k, v) => v ? `<div class="kv"><dt>${k}</dt><dd>${v}</dd></div>` : "";
+
+function sheetDef(id){
+  const d = DEF[id]; markSeen("def:"+id);
+  const lvl = DFS_OF[id];
+  const types = TYPES.filter(t=>t.core.includes(id)).map(t=>`<button type="button" class="tchip" data-open="type:${t.id}"><span class="mono-badge">${t.m}</span>${esc(t.n)}</button>`).join("");
+  const where = lvl ? `Уровень ${lvl} из 7 — ${esc(DFS[lvl-1].name.toLowerCase())}; типично для уровня «${LEVELS[DFS[lvl-1].band].short}»` : "Отдельной ступени в шкале DSM-IV нет";
+  openSheet(`<span class="pill" style="--c:${GC(d.g)}">${esc(GROUPS[d.g].n)}</span><h2 id="shTitle" style="margin-top:6px">${esc(d.n)}</h2>`,
+   `<dl>${kv("Суть", esc(d.s))}${kv("От чего защищает", esc(d.p[0].toUpperCase()+d.p.slice(1))+".")}</dl>
+    <div class="quote">${esc(d.e)}</div>
+    <dl>${kv("В команде и организации", esc(d.w))}${kv("Место на шкале DSM-IV", where)}</dl>
+    ${types?`<div class="blk"><h4>Ключевая защита для типов</h4><div class="chiprow wrapr">${types}</div></div>`:""}`);
+  renderAfterSeen();
+}
+function sheetType(id){
+  const t = TYPE[id]; markSeen("type:"+id);
+  const trig = TRIGGERS.filter(c=>c.vuln.includes(id)).map(c=>c.n).join(", ");
+  const stab = STABS.filter(c=>c.bonus.includes(id)).map(c=>c.n).join(", ");
+  openSheet(`<div class="eyebrow">Тип личности · ${t.m}</div><h2 id="shTitle">${esc(t.n)}</h2>${t.alt?`<span class="muted" style="font-size:13px">${esc(t.alt)}</span>`:""}`,
+   `<div class="quote">${esc(t.theme)}</div>
+    <div class="blk"><h4>Ключевые защиты</h4><div class="chiprow wrapr">${t.core.map(x=>dchip(x)).join("")}</div></div>
+    <dl>${kv("Чувства", esc(t.affects))}${kv("Отношения", esc(t.relations))}${kv("Образ себя", esc(t.self))}${kv("Что чувствует консультант (контрперенос)", esc(t.counter))}${kv("В организации", esc(t.org))}${kv("Что помогает", esc(t.help))}${kv("Специфические стрессоры", esc(trig || "Общие: перегрузка, недосып, вещества"))}${kv("Лучшие стабилизаторы", esc(stab || "Общие: сон, терапия"))}</dl>
+    <div class="blk"><h4>На четырёх уровнях</h4>${t.lv.map((x,i)=>`<button type="button" class="btn" style="text-align:left;border-left:4px solid ${LVC[i]}" data-open="cell:${id}:${i}"><b>${LEVELS[i].name}:</b> ${esc(x[1])}</button>`).join("")}</div>
+    <button type="button" class="btn pri" data-sim="${id}">Открыть в симуляторе</button>`);
+  renderAfterSeen();
+}
+function sheetLevel(i){
+  const L = LEVELS[i]; markSeen("level:"+i);
+  openSheet(`<span class="pill" style="--c:${LVC[i]}">Уровень организации</span><h2 id="shTitle" style="margin-top:6px">${L.name}</h2>`,
+   `<div class="quote">${esc(L.tagline)}</div>
+    <dl>${CRITERIA.map(([k,n])=>kv(n, esc(L.rows[k]))).join("")}</dl>
+    <div class="blk"><h4>Признаки со стороны</h4><ul class="marks">${L.markers.map(m=>`<li>${esc(m)}</li>`).join("")}</ul></div>
+    ${L.note?`<p class="muted" style="font-size:13.5px">${esc(L.note)}</p>`:""}
+    <div class="blk"><h4>Защиты этого уровня по шкале DSM-IV</h4><div class="chiprow wrapr">${DFS.filter(r=>r.band===i).flatMap(r=>r.ids).map(x=>dchip(x)).join("")}</div></div>`);
+  renderAfterSeen();
+}
+function sheetCell(id, i){
+  const t = TYPE[id], L = LEVELS[i];
+  openSheet(`<div class="eyebrow">${t.m} · ${esc(L.short)} уровень</div><h2 id="shTitle">${esc(t.n)}: ${esc(t.lv[i][0])}</h2>`,
+   `<div class="quote" style="border-color:${LVC[i]}">${esc(t.lv[i][1])}</div>
+    <div class="blk"><h4>Характерные защиты на этом уровне</h4><div class="chiprow wrapr">${t.bands[i].map(x=>dchip(x)).join("")}</div></div>
+    <dl>${kv("Центральная тема типа", esc(t.theme))}${kv("Особенность уровня", esc(L.tagline))}</dl>
+    <div class="chiprow wrapr"><button type="button" class="btn pri" data-sim="${id}" data-simbase="${i}">Показать в симуляторе</button><button type="button" class="btn" data-open="type:${id}">Весь профиль типа</button><button type="button" class="btn" data-open="level:${i}">Об уровне</button></div>`);
+}
+function sheetAch(){
+  openSheet(`<div class="eyebrow">Прогресс</div><h2 id="shTitle">Изучено ${S.seen.size} из ${TOTAL}</h2>`,
+   `<p class="muted" style="font-size:14px">Считаются открытые карточки типов, уровней и защит. Прогресс хранится только в этом браузере.</p>
+    <div>${ACH.map((a,i)=>`<div class="ach ${S.ach.has(a.id)?"on":""}"><span class="ic">${i+1}</span><div><b>${esc(a.n)}</b><br><small>${esc(a.d)}</small></div></div>`).join("")}</div>
+    <p class="muted" style="font-size:13px">Лучший результат в тренажёре: <b class="mono">${S.best}</b></p>`);
+}
+function renderAfterSeen(){ renderProgress(); if(!$("#v-types").hidden) renderTypes(); }
+$("#prog").addEventListener("click", sheetAch);
+
+document.addEventListener("click", e => {
+  const pt = e.target.closest("[data-picktype]"); if(pt){ closeSheet(); setType(pt.dataset.picktype); return; }
+  const pb = e.target.closest("[data-pickbase]"); if(pb){ closeSheet(); setBase(+pb.dataset.pickbase); return; }
+  const o = e.target.closest("[data-open]");
+  if(o){
+    const [k, a, b] = o.dataset.open.split(":");
+    if(k==="def") sheetDef(a); else if(k==="type") sheetType(a); else if(k==="level") sheetLevel(+a); else if(k==="cell") sheetCell(a, +b);
+    return;
+  }
+  const s = e.target.closest("[data-sim]");
+  if(s){
+    S.type = s.dataset.sim; S.mxType = S.type; S.mxLevel = null;
+    if(s.dataset.simbase !== undefined){ S.base = +s.dataset.simbase; S.stress = 0; S.deepest = null; S.last = null; }
+    closeSheet(); location.hash = "schema"; renderControls(); renderDecks(); update(false, true);
+    requestAnimationFrame(()=>$("#v-schema").scrollIntoView({block:"start"}));
+  }
+});
+document.addEventListener("keydown", e => {
+  if((e.key==="Enter"||e.key===" ") && e.target.matches(".mxc[data-open]")){ e.preventDefault(); e.target.click(); }
+});
+
+/* ---------- quiz ---------- */
+const Q = {items:[], i:0, score:0, streak:0, bestStreak:0, mistakes:0, answered:false};
+function shuffle(a){ a = a.slice(); for(let i=a.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function newRound(){ Object.assign(Q, {items:shuffle(QUIZ).slice(0,12).map(x=>({...x, opts:shuffle([x.a, ...x.o])})), i:0, score:0, streak:0, bestStreak:0, mistakes:0, answered:false}); renderQuiz(); }
+const RANKS = [[0,"Наблюдатель"],[60,"Стажёр"],[120,"Консультант"],[180,"Супервизор"],[230,"Мастер диагностики"]];
+const rankOf = s => RANKS.filter(r=>s>=r[0]).pop()[1];
+function renderQuiz(){
+  const box = $("#quiz");
+  const stats = `<div class="qstats"><div class="card qstat"><span>Очки</span><b>${Q.score}</b></div><div class="card qstat"><span>Серия</span><b>${Q.streak}${Q.streak>=2?` <span class="combo">×${Math.min(3,1+Math.floor(Q.streak/2)*0.5).toFixed(1)}</span>`:""}</b></div><div class="card qstat"><span>Ранг</span><b style="font-size:13px;font-family:var(--f-body)">${rankOf(Q.score)}</b></div><div class="card qstat"><span>Рекорд</span><b>${S.best}</b></div></div>`;
+  if(Q.i >= Q.items.length){
+    if(Q.mistakes===0) unlock("perfect");
+    if(Q.score > S.best){ S.best = Q.score; save("atlas-best", S.best); }
+    box.innerHTML = stats + `<div class="card qcard"><div class="eyebrow">Раунд завершён</div><h2>${rankOf(Q.score)}</h2><p>Очки: <b class="mono">${Q.score}</b> · ошибок: <b class="mono">${Q.mistakes}</b> · лучшая серия: <b class="mono">${Q.bestStreak}</b></p><div class="chiprow wrapr"><button type="button" class="btn pri" id="qAgain">Новый раунд</button><a class="btn" href="#defenses" style="text-decoration:none">Повторить лестницу защит</a></div></div>`;
+    $("#qAgain").addEventListener("click", newRound); return;
+  }
+  const it = Q.items[Q.i];
+  box.innerHTML = stats + `<div class="qprog"><i style="width:${Q.i/Q.items.length*100}%"></i></div>
+   <div class="card qcard"><div class="eyebrow">Ситуация ${Q.i+1} из ${Q.items.length}</div><p class="sit">${esc(it.q)}</p>
+   <div class="opts">${it.opts.map(o=>`<button type="button" class="opt" data-ans="${o}">${esc(DEF[o].n)}</button>`).join("")}</div><div id="qfb"></div></div>`;
+}
+$("#quiz").addEventListener("click", e => {
+  const b = e.target.closest("[data-ans]");
+  if(b && !Q.answered){
+    Q.answered = true;
+    const it = Q.items[Q.i], ok = b.dataset.ans === it.a;
+    $("#quiz").querySelectorAll(".opt").forEach(x=>{ x.disabled = true; if(x.dataset.ans===it.a) x.classList.add("ok"); });
+    if(ok){ Q.streak++; Q.bestStreak = Math.max(Q.bestStreak, Q.streak); const mult = Math.min(3, 1+Math.floor((Q.streak-1)/2)*0.5); const pts = Math.round(10*mult); Q.score += pts; floatBy(b, "+"+pts, "var(--lv0)"); if(Q.streak>=5) unlock("streak5"); }
+    else { b.classList.add("no"); Q.streak = 0; Q.mistakes++; }
+    const d = DEF[it.a];
+    $("#qfb").innerHTML = `<div class="fb"><b style="color:${ok?"var(--lv0)":"var(--lv3)"}">${ok?"Верно":"Это " + esc(d.n.toLowerCase())}</b><span>${esc(it.why)}</span><div class="chiprow wrapr" style="margin-top:6px">${dchip(it.a)}<button type="button" class="btn pri" id="qNext">${Q.i+1<Q.items.length?"Дальше":"Итоги"}</button></div></div>`;
+    $("#qNext").addEventListener("click", ()=>{ Q.i++; Q.answered=false; renderQuiz(); });
+    $("#qNext").focus({preventScroll:true});
+    $("#qfb").scrollIntoView({block:"nearest", behavior: reduce ? "auto" : "smooth"});
+  }
+});
+
+/* ---------- routing & layout ---------- */
+const VIEWS = ["schema","levels","types","defenses","quiz"];
+function setHH(){ document.documentElement.style.setProperty("--hh", $("#top").offsetHeight + "px"); observe(); }
+function route(){
+  const h = (location.hash||"").replace("#","");
+  const v = VIEWS.includes(h) ? h : "schema";
+  VIEWS.forEach(x=>{ $("#v-"+x).hidden = x!==v; });
+  document.querySelectorAll(".tabs a").forEach(a=>{ if(a.getAttribute("href")==="#"+v) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current"); });
+  if(v==="types") renderTypes();
+  if(v==="defenses") renderDefenses();
+  if(v==="quiz" && !Q.items.length) newRound();
+  if(v==="schema") requestAnimationFrame(()=>{ layoutStage(); renderOrbit(); });
+  syncMini();
+  tip.hidden = true;
+}
+addEventListener("hashchange", () => { route(); scrollTo({top:0}); });
+let rs; addEventListener("resize", () => { clearTimeout(rs); rs = setTimeout(()=>{ setHH(); layoutStage(); renderOrbit(); }, 120); });
+
+/* ---------- boot ---------- */
+buildStage(); renderControls(); renderDecks(); renderLevels(); setPanel("state"); setHH();
+S.log = [{n:"Публичная критика (пример)", d:"+29", k:"t", hit:true, lv:"Невротический"}];
+S.last = {d:"+29", n:"Публичная критика (пример)", k:"t", hit:true};
+route(); layoutStage(); update(false, true); renderProgress();
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(()=>{ setHH(); layoutStage(); });
+})();
+
+</script>
